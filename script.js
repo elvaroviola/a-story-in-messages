@@ -110,7 +110,7 @@ const ep1After1 = [
   ["Keonho","don't get too comfortable.",900],
   ["Elvaro","too late.",800],
   ["Seonghyeon","what time does orientation start?",1200],
-  ["Martin","nine, I think.",1000],
+  ["Martin","eight, I think.",1000],
   ["Silvia","that's soon.",900]
 ];
 
@@ -178,11 +178,16 @@ async function episode1(){
       showChoices(ep1Choice3,async c3=>{
         hideChoices();martinAffection+=c3.points;await playMessages(c3.msg);
         await wait(1500);
-        addDate("EPISODE 1 · END");
-        await wait(1000);
         await sendMessage(["Martin","see you tomorrow.",1500]);
         await sendMessage(["[NAME]","see you.",true]);
+        await sendMessage(["Martin","good night [NAME]",1500]);
+        await sendMessage(["[NAME]","good night, Martin",true]);
+        await sendMessage(["Martin","and don't oversleep",1500]);
+        await sendMessage(["[NAME]","no promises",true]);
+        await sendMessage(["Martin","I had a feeling you'd say that",1500]);
         await wait(1500);
+        addDate("EPISODE 1 · END");
+        await wait(1000);
         await episode2();
       });
     });
