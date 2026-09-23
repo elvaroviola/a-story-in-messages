@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>A Story in Messages</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <!-- OPENING -->
+    <section id="welcome-screen" class="screen welcome-screen active">
+      <div class="grain"></div>
+      <div class="welcome-content">
+        <p class="eyebrow">A CHAT STORY</p>
+        <h1>A Story<br><span>in Messages</span></h1>
+        <p class="welcome-copy">
+          Ten episodes.<br>
+          A few choices.<br>
+          One story that becomes yours.
+        </p>
+        <button id="start-btn" class="primary-btn">START YOUR STORY <span>→</span></button>
+        <p class="tiny-note">made for someone special ♡</p>
+      </div>
+    </section>
+
+    <!-- NAME -->
+    <section id="name-screen" class="screen name-screen">
+      <div class="name-card">
+        <p class="eyebrow">BEFORE WE BEGIN</p>
+        <h2>What's your name?</h2>
+        <p>This story will be yours.</p>
+
+        <input id="name-input" type="text" maxlength="24" placeholder="Enter your name..." autocomplete="off">
+        <button id="name-btn" class="primary-btn">CONTINUE <span>→</span></button>
+        <p id="name-error" class="error-text"></p>
+      </div>
+    </section>
+
+    <!-- CHAT -->
+    <section id="chat-screen" class="screen chat-screen">
+
+      <header class="chat-header">
+        <button id="back-btn" class="icon-btn" aria-label="Back">‹</button>
+
+        <div class="profile">
+          <div class="avatar martin-avatar">M</div>
+          <div>
+            <strong>Martin</strong>
+            <span id="status-text">online</span>
+          </div>
+        </div>
+
+        <div class="header-actions">
+          <button class="icon-btn" aria-label="Video">▣</button>
+          <button class="icon-btn" aria-label="Call">⌕</button>
+        </div>
+      </header>
+
+      <main id="chat-messages" class="chat-messages">
+        <div class="date-divider">MONDAY · 11:47 PM</div>
+      </main>
+
+      <div id="choice-area" class="choice-area hidden">
+        <p class="choice-label">How do you respond?</p>
+        <div id="choices"></div>
+      </div>
+
+      <footer class="fake-input">
+        <button class="plus-btn">+</button>
+        <div class="message-placeholder">Type a message...</div>
+        <button class="mini-icon">☺</button>
+        <button class="mini-icon">⌁</button>
+      </footer>
+
+    </section>
+
+    <!-- END -->
+    <section id="end-screen" class="screen end-screen">
+      <p class="eyebrow">PROTOTYPE COMPLETE</p>
+      <h2>That's the first conversation.</h2>
+      <p>
+        If you like this direction, we'll turn it into the full
+        10-episode branching story.
+      </p>
+      <button id="replay-btn" class="primary-btn">PLAY AGAIN <span>↻</span></button>
+    </section>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
