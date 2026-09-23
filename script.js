@@ -293,12 +293,35 @@ function addTyping(){
 }
 function removeTyping(){document.getElementById("typing-indicator")?.remove()}
 
+function typingDuration(text, customDelay){
+  if(customDelay != null) return customDelay;
+  const clean = text.replace(/\\[NAME\\]/g, playerName).trim();
+  const length = clean.length;
+  // Short replies feel immediate; longer/thoughtful messages take longer.
+  if(length <= 14) return 900;
+  if(length <= 30) return 1200;
+  if(length <= 55) return 1550;
+  if(length <= 85) return 1900;
+  return 2250;
+}
+
 async function sendMessage(m){
-  if(m.you){await wait(220);addBubble("Player",m.text,true);return}
+  if(m.you){
+    await wait(350);
+    addBubble("Player",m.text,true);
+    return;
+  }
+
   addTyping();
-  await wait(m.delay ?? 750);
+
+  // A tiny "thinking" pause before the typing indicator starts.
+  await wait(typingDuration(m.text, m.delay));
+
   removeTyping();
   addBubble(m.sender,m.text,false);
+
+  // Small breathing room after each received message.
+  await wait(450);
 }
 async function playMessages(list){
   for(const m of list) await sendMessage(m);
@@ -325,7 +348,7 @@ async function beginStory(){
   chatMessages.innerHTML="";
   document.getElementById("chat-title").textContent="UMN Freshman Orientation";
   statusText.textContent="online";
-  await wait(400);
+  await wait(650);
   addDate("SEPTEMBER 2020 · 8:12 AM");
   await playMessages(groupIntro);
   await playMessages(intros);
