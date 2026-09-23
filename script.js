@@ -22,7 +22,172 @@ const avatar = document.querySelector(".martin-avatar");
 let playerName = "";
 let martinAffection = 0;
 
-const groupMorning = [
+function wait(ms){return new Promise(r=>setTimeout(r,ms))}
+function personalize(text){return text.replaceAll("[NAME]",playerName)}
+function showScreen(screen){Object.values(screens).forEach(s=>s.classList.remove("active"));screen.classList.add("active")}
+function scrollBottom(){requestAnimationFrame(()=>chatMessages.scrollTop=chatMessages.scrollHeight)}
+function addDate(text){const d=document.createElement("div");d.className="date-divider";d.textContent=text;chatMessages.appendChild(d);scrollBottom()}
+function addBubble(sender,text,you=false){
+  const row=document.createElement("div");row.className=`message-row ${you?"you":"them"}`;
+  const b=document.createElement("div");b.className="bubble";
+  b.innerHTML=`${you?"":`<div class="sender-name">${sender}</div>`}${personalize(text)}<span class="message-time">now</span>`;
+  row.appendChild(b);chatMessages.appendChild(row);scrollBottom();
+}
+function addTyping(){
+  const row=document.createElement("div");row.className="typing-row";row.id="typing-indicator";
+  row.innerHTML=`<div class="typing-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+  chatMessages.appendChild(row);scrollBottom();
+}
+function removeTyping(){document.getElementById("typing-indicator")?.remove()}
+function setChatMode(title,status,letter){chatTitle.textContent=title;statusText.textContent=status;avatar.textContent=letter}
+async function sendMessage(m){
+  const [sender,text,third]=m, you=third===true, delay=typeof third==="number"?third:null;
+  if(you){await wait(350);addBubble("Player",text,true);await wait(350);return}
+  addTyping();await wait(delay??Math.min(2600,Math.max(850,650+text.length*24)));removeTyping();
+  addBubble(sender,text,false);await wait(500);
+}
+async function playMessages(list){for(const m of list)await sendMessage(m)}
+function showChoices(data,callback,label="How do you respond?"){
+  choiceLabel.textContent=label;choices.innerHTML="";
+  data.forEach(item=>{const btn=document.createElement("button");btn.className="choice";btn.textContent=personalize(item.text);btn.onclick=()=>callback(item);choices.appendChild(btn)});
+  choiceArea.classList.remove("hidden");scrollBottom();
+}
+function hideChoices(){choiceArea.classList.add("hidden")}
+async function transitionTo(title,status,letter,date){
+  await wait(1200);chatMessages.innerHTML="";setChatMode(title,status,letter);addDate(date);await wait(750);
+}
+
+/* =========================
+   EPISODE 1
+   ========================= */
+const ep1Group = [
+  ["Silvia","hey everyone!!",900],
+  ["Keonho","is this the freshman orientation group?",1100],
+  ["Seonghyeon","yes.",850],
+  ["Elvaro","finally.",850],
+  ["Silvia","we're actually classmates 😭",1200],
+  ["Keonho","this is going to be interesting.",1300],
+  ["Martin","morning.",900],
+  ["Silvia","MARTINNN",950],
+  ["Keonho","you actually showed up.",1000],
+  ["Martin","I was here the whole time.",1200],
+  ["Elvaro","sure.",850],
+  ["Seonghyeon","has everyone introduced themselves?",1200],
+  ["Silvia","wait that's a good idea.",1000],
+  ["Silvia","let's do introductions.",1000]
+];
+
+const ep1Choice1 = [
+  {text:"Hi, I'm [NAME]. Nice to meet you!",points:2,msg:[
+    ["Player","Hi, I'm [NAME]. Nice to meet you!",true],
+    ["Silvia","nice to meet you!!",1000],
+    ["Keonho","welcome to the chaos.",1100],
+    ["Elvaro","accurate.",800],
+    ["Martin","nice to meet you, [NAME].",1300]
+  ]},
+  {text:"I'm [NAME]. I don't know what else to say 😭",points:2,msg:[
+    ["Player","I'm [NAME]. I don't know what else to say 😭",true],
+    ["Keonho","honest. I like it.",1100],
+    ["Silvia","HAHAHAHA same.",900],
+    ["Martin","that's enough of an introduction.",1300]
+  ]},
+  {text:"[NAME]. That's it.",points:1,msg:[
+    ["Player","[NAME]. That's it.",true],
+    ["Keonho","wow.",850],
+    ["Silvia","mysterious.",1000],
+    ["Elvaro","efficient.",950],
+    ["Martin","noted.",1000]
+  ]}
+];
+
+const ep1After1 = [
+  ["Silvia","okay now I feel like we're actually a group.",1200],
+  ["Keonho","don't get too comfortable.",900],
+  ["Elvaro","too late.",800],
+  ["Seonghyeon","what time does orientation start?",1200],
+  ["Martin","nine, I think.",1000],
+  ["Silvia","that's soon.",900]
+];
+
+const ep1Choice2 = [
+  {text:"I'm excited, honestly.",points:2,msg:[
+    ["Player","I'm excited, honestly.",true],
+    ["Martin","really?",1000],
+    ["Player","yeah.",true],
+    ["Martin","that's nice.",1100],
+    ["Martin","I'm a little nervous.",1300],
+    ["Player","you?",true],
+    ["Martin","a little.",1000]
+  ]},
+  {text:"I'm nervous.",points:2,msg:[
+    ["Player","I'm nervous.",true],
+    ["Martin","same.",950],
+    ["Player","really?",true],
+    ["Martin","a little.",1000],
+    ["Martin","guess we're in the same boat.",1400]
+  ]},
+  {text:"I just want the day to be over.",points:1,msg:[
+    ["Player","I just want the day to be over.",true],
+    ["Martin","it's not even started yet 😭",1400],
+    ["Player","exactly.",true],
+    ["Martin","fair.",850]
+  ]}
+];
+
+const ep1Choice3 = [
+  {text:"Stay and keep talking.",points:2,msg:[
+    ["Player","I'm not sleepy yet.",true],
+    ["Martin","good.",900],
+    ["Martin","I was hoping you'd stay.",1500],
+    ["Player","why?",true],
+    ["Martin","I don't know.",1000],
+    ["Martin","you're easy to talk to.",1500]
+  ]},
+  {text:"Tell him you're tired.",points:1,msg:[
+    ["Player","I'm getting sleepy.",true],
+    ["Martin","then you should sleep.",1000],
+    ["Player","you too.",true],
+    ["Martin","probably.",900],
+    ["Martin","goodnight, [NAME].",1400]
+  ]},
+  {text:"Tease him about being awake.",points:2,msg:[
+    ["Player","weren't you the one who said you were tired?",true],
+    ["Martin","I am.",1000],
+    ["Player","doesn't look like it.",true],
+    ["Martin","maybe you're keeping me awake.",1500],
+    ["Player","me?",true],
+    ["Martin","maybe.",1100]
+  ]}
+];
+
+async function episode1(){
+  chatMessages.innerHTML="";setChatMode("UMN Freshman Orientation","online","U");
+  addDate("SEPTEMBER 2020 · 8:32 AM");
+  await wait(700);await playMessages(ep1Group);
+  showChoices(ep1Choice1,async c1=>{
+    hideChoices();martinAffection+=c1.points;await playMessages(c1.msg);await playMessages(ep1After1);
+    showChoices(ep1Choice2,async c2=>{
+      hideChoices();martinAffection+=c2.points;await playMessages(c2.msg);
+      await transitionTo("Martin","online","M","PRIVATE CHAT · 11:48 PM");
+      await sendMessage(["Martin","you still awake, [NAME]?",1500]);
+      showChoices(ep1Choice3,async c3=>{
+        hideChoices();martinAffection+=c3.points;await playMessages(c3.msg);
+        await wait(1500);
+        addDate("EPISODE 1 · END");
+        await wait(1000);
+        await sendMessage(["Martin","see you tomorrow.",1500]);
+        await sendMessage(["Player","see you.",true]);
+        await wait(1500);
+        await episode2();
+      });
+    });
+  });
+}
+
+/* =========================
+   EPISODE 2
+   ========================= */
+const ep2Morning = [
   ["Silvia","GOOD MORNING EVERYONEEEE ☀️",900],
   ["Keonho","why are you awake this early",1100],
   ["Silvia","because today's orientation???",1000],
@@ -35,366 +200,141 @@ const groupMorning = [
   ["Silvia","WHAT",700],
   ["Silvia","WE HAVE TO JOIN NOW???",1200],
   ["Keonho","I'M STILL IN BED",1000],
-  ["Elvaro","congratulations.",1000],
+  ["Elvaro","congratulations.",1000]
 ];
 
-const choice1 = [
-  {
-    text:"Yeah, I'm already ready.",
-    points:2,
-    messages:[
-      ["Player","Yeah, I'm already ready.",true],
-      ["Martin","impressive.",1200],
-      ["Player","why?",true],
-      ["Martin","you sounded like someone who would oversleep.",1500],
-      ["Player","wow.",true],
-      ["Martin","I said sounded.",1100],
-      ["Player","sure.",true],
-      ["Martin","fair enough.",1000]
-    ]
-  },
-  {
-    text:"No 😭 I'm still getting ready.",
-    points:2,
-    messages:[
-      ["Player","No 😭 I'm still getting ready.",true],
-      ["Martin","I knew it.",1100],
-      ["Player","how???",true],
-      ["Martin","you literally said \"no promises\" last night.",1600],
-      ["Player","you remembered that?",true],
-      ["Martin","unfortunately.",1200],
-      ["Player","rude.",true],
-      ["Martin","just hurry up.",1100]
-    ]
-  },
-  {
-    text:"I was about to ask you the same thing.",
-    points:1,
-    messages:[
-      ["Player","I was about to ask you the same thing.",true],
-      ["Martin","I'm ready.",1000],
-      ["Player","really?",true],
-      ["Martin","yes.",800],
-      ["Player","prove it.",true],
-      ["Martin","what kind of proof do you want 😭",1500],
-      ["Player","I don't know.",true],
-      ["Martin","then I'll assume I passed.",1300]
-    ]
-  }
+const ep2Choice1 = [
+  {text:"Yeah, I'm already ready.",points:2,msg:[
+    ["Player","Yeah, I'm already ready.",true],["Martin","impressive.",1200],
+    ["Player","why?",true],["Martin","you sounded like someone who would oversleep.",1500],
+    ["Player","wow.",true],["Martin","I said sounded.",1100],["Player","sure.",true],["Martin","fair enough.",1000]
+  ]},
+  {text:"No 😭 I'm still getting ready.",points:2,msg:[
+    ["Player","No 😭 I'm still getting ready.",true],["Martin","I knew it.",1100],
+    ["Player","how???",true],["Martin","you literally said \"no promises\" last night.",1600],
+    ["Player","you remembered that?",true],["Martin","unfortunately.",1200],
+    ["Player","rude.",true],["Martin","just hurry up.",1100]
+  ]},
+  {text:"I was about to ask you the same thing.",points:1,msg:[
+    ["Player","I was about to ask you the same thing.",true],["Martin","I'm ready.",1000],
+    ["Player","really?",true],["Martin","yes.",800],["Player","prove it.",true],
+    ["Martin","what kind of proof do you want 😭",1500],["Player","I don't know.",true],
+    ["Martin","then I'll assume I passed.",1300]
+  ]}
 ];
 
-const afterChoice1 = [
-  ["Silvia","GUYS",850],
-  ["Silvia","THE LINK IS IN THE EMAIL",1300],
-  ["Keonho","we know",900],
-  ["Silvia","I'M JUST MAKING SURE",1200],
-  ["Elvaro","thank you for your service.",1200],
-  ["Seonghyeon","I'm joining.",950],
-  ["Keonho","wait for me",900],
-  ["Elvaro","no.",700],
-  ["Keonho","why",800],
-  ["Elvaro","because you said you were still in bed.",1500],
-  ["Martin","I'm joining too.",1100],
-  ["Martin","see you there.",1000]
+const ep2After1 = [
+  ["Silvia","GUYS",850],["Silvia","THE LINK IS IN THE EMAIL",1300],["Keonho","we know",900],
+  ["Silvia","I'M JUST MAKING SURE",1200],["Elvaro","thank you for your service.",1200],
+  ["Seonghyeon","I'm joining.",950],["Keonho","wait for me",900],["Elvaro","no.",700],
+  ["Keonho","why",800],["Elvaro","because you said you were still in bed.",1500],
+  ["Martin","I'm joining too.",1100],["Martin","see you there.",1000]
 ];
 
-const privateIntro = [
-  ["Martin","hey.",1100],
-  ["Martin","are you actually paying attention?",1700]
+const ep2PrivateIntro = [["Martin","hey.",1100],["Martin","are you actually paying attention?",1700]];
+
+const ep2Choice2 = [
+  {text:"Of course I am.",points:1,msg:[
+    ["Player","Of course I am.",true],["Martin","good.",900],
+    ["Martin","because I have no idea what's happening.",1500],["Player","😭",true],
+    ["Martin","I thought you knew.",1200],["Player","I was just pretending.",true],
+    ["Martin","so we're both pretending.",1300],["Player","apparently.",true],["Martin","nice.",900]
+  ]},
+  {text:"Not really 😭",points:2,msg:[
+    ["Player","Not really 😭",true],["Martin","thank god.",1100],["Player","why?",true],
+    ["Martin","I thought I was the only one.",1400],["Player","what are you doing then?",true],
+    ["Martin","looking at the screen and hoping something makes sense.",1900],
+    ["Player","same.",true],["Martin","good.",900],["Martin","we're doing great.",1300]
+  ]},
+  {text:"Why? Are you?",points:2,msg:[
+    ["Player","Why? Are you?",true],["Martin","...",900],["Martin","no.",800],
+    ["Player","HAHAHAHA",true],["Martin","don't expose me.",1200],
+    ["Player","I won't.",true],["Martin","thank you.",1000],["Player","you're welcome.",true]
+  ]}
 ];
 
-const choice2 = [
-  {
-    text:"Of course I am.",
-    points:1,
-    messages:[
-      ["Player","Of course I am.",true],
-      ["Martin","good.",900],
-      ["Martin","because I have no idea what's happening.",1500],
-      ["Player","😭",true],
-      ["Martin","I thought you knew.",1200],
-      ["Player","I was just pretending.",true],
-      ["Martin","so we're both pretending.",1300],
-      ["Player","apparently.",true],
-      ["Martin","nice.",900]
-    ]
-  },
-  {
-    text:"Not really 😭",
-    points:2,
-    messages:[
-      ["Player","Not really 😭",true],
-      ["Martin","thank god.",1100],
-      ["Player","why?",true],
-      ["Martin","I thought I was the only one.",1400],
-      ["Player","what are you doing then?",true],
-      ["Martin","looking at the screen and hoping something makes sense.",1900],
-      ["Player","same.",true],
-      ["Martin","good.",900],
-      ["Martin","we're doing great.",1300]
-    ]
-  },
-  {
-    text:"Why? Are you?",
-    points:2,
-    messages:[
-      ["Player","Why? Are you?",true],
-      ["Martin","...",900],
-      ["Martin","no.",800],
-      ["Player","HAHAHAHA",true],
-      ["Martin","don't expose me.",1200],
-      ["Player","I won't.",true],
-      ["Martin","thank you.",1000],
-      ["Player","you're welcome.",true]
-    ]
-  }
+const ep2Choice3 = [
+  {text:"Maybe something creative.",points:2,msg:[
+    ["Player","Maybe something creative.",true],["Martin","makes sense.",1100],
+    ["Player","why?",true],["Martin","I don't know.",900],
+    ["Martin","you just seem like that kind of person.",1600],["Player","what kind?",true],
+    ["Martin","I'll tell you when I figure it out.",1500],["Player","that's suspicious.",true],["Martin","maybe.",1000]
+  ]},
+  {text:"Probably nothing. I just want to survive university.",points:1,msg:[
+    ["Player","Probably nothing. I just want to survive university.",true],
+    ["Martin","that's actually a good goal.",1400],["Player","thank you.",true],
+    ["Martin","we can survive together.",1400],["Player","\"we\"?",true],
+    ["Martin","as classmates.",1200],["Player","sure.",true],["Martin","don't make it weird 😭",1400]
+  ]},
+  {text:"I haven't decided. Maybe I'll figure it out later.",points:1,msg:[
+    ["Player","I haven't decided. Maybe I'll figure it out later.",true],["Martin","same.",900],
+    ["Player","at least I'm not the only one.",true],["Martin","nope.",850],
+    ["Martin","we can figure it out eventually.",1400]
+  ]}
 ];
 
-const privateChoice3Intro = [
-  ["Martin","they're talking about campus organizations now.",1400],
-  ["Player","already?",true],
-  ["Martin","apparently.",900],
-  ["Player","have you thought about joining one?",1500],
-  ["Martin","maybe.",900],
-  ["Player","which one?",true],
-  ["Martin","not sure yet.",1000],
-  ["Martin","you?",1100]
+const ep2GroupEnd = [
+  ["Silvia","WE SURVIVED!!!!",1000],["Keonho","barely",850],["Elvaro","speak for yourself",1100],
+  ["Seonghyeon","we still have another session later.",1500],["Keonho","...",900],
+  ["Keonho","I take it back.",1000],["Silvia","HAHAHAHA",900],
+  ["Martin","I'll probably disappear for a bit.",1400],["Silvia","where are you going?",1000],
+  ["Martin","lunch.",850],["Keonho","without us???",1200],["Martin","yes.",800],["Elvaro","cruel.",900]
 ];
 
-const choice3 = [
-  {
-    text:"Maybe something creative.",
-    points:2,
-    messages:[
-      ["Player","Maybe something creative.",true],
-      ["Martin","makes sense.",1100],
-      ["Player","why?",true],
-      ["Martin","I don't know.",900],
-      ["Martin","you just seem like that kind of person.",1600],
-      ["Player","what kind?",true],
-      ["Martin","I'll tell you when I figure it out.",1500],
-      ["Player","that's suspicious.",true],
-      ["Martin","maybe.",1000]
-    ]
-  },
-  {
-    text:"Probably nothing. I just want to survive university.",
-    points:1,
-    messages:[
-      ["Player","Probably nothing. I just want to survive university.",true],
-      ["Martin","that's actually a good goal.",1400],
-      ["Player","thank you.",true],
-      ["Martin","we can survive together.",1400],
-      ["Player","\"we\"?",true],
-      ["Martin","as classmates.",1200],
-      ["Player","sure.",true],
-      ["Martin","don't make it weird 😭",1400]
-    ]
-  },
-  {
-    text:"I haven't decided. Maybe I'll figure it out later.",
-    points:1,
-    messages:[
-      ["Player","I haven't decided. Maybe I'll figure it out later.",true],
-      ["Martin","same.",900],
-      ["Player","at least I'm not the only one.",true],
-      ["Martin","nope.",850],
-      ["Martin","we can figure it out eventually.",1400]
-    ]
-  }
+const ep2Choice4 = [
+  {text:"Yeah, I'm hungry.",points:2,msg:[
+    ["Player","Yeah, I'm hungry.",true],["Martin","good.",900],["Martin","go eat.",950],
+    ["Player","you too.",true],["Martin","I will.",850],["Player","promise?",true],["Martin","promise.",1000]
+  ]},
+  {text:"Not yet.",points:1,msg:[
+    ["Player","Not yet.",true],["Martin","you should eat.",1100],["Player","I'll eat later.",true],
+    ["Martin","don't forget.",1050],["Player","I won't.",true],["Martin","good.",850]
+  ]},
+  {text:"Are you inviting me? 👀",points:3,msg:[
+    ["Player","Are you inviting me? 👀",true],["Martin","maybe.",1500],["Player","maybe???",true],
+    ["Martin","I was just asking.",1400],["Player","sure.",true],["Martin","don't make this difficult 😭",1500],
+    ["Player","I'm not.",true],["Martin","you are.",1100]
+  ]}
 ];
 
-const groupEnd = [
-  ["Silvia","WE SURVIVED!!!!",1000],
-  ["Keonho","barely",850],
-  ["Elvaro","speak for yourself",1100],
-  ["Seonghyeon","we still have another session later.",1500],
-  ["Keonho","...",900],
-  ["Keonho","I take it back.",1000],
-  ["Silvia","HAHAHAHA",900],
-  ["Martin","I'll probably disappear for a bit.",1400],
-  ["Silvia","where are you going?",1000],
-  ["Martin","lunch.",850],
-  ["Keonho","without us???",1200],
-  ["Martin","yes.",800],
-  ["Elvaro","cruel.",900]
-];
-
-const choice4 = [
-  {
-    text:"Yeah, I'm hungry.",
-    points:2,
-    messages:[
-      ["Player","Yeah, I'm hungry.",true],
-      ["Martin","good.",900],
-      ["Martin","go eat.",950],
-      ["Player","you too.",true],
-      ["Martin","I will.",850],
-      ["Player","promise?",true],
-      ["Martin","promise.",1000]
-    ]
-  },
-  {
-    text:"Not yet.",
-    points:1,
-    messages:[
-      ["Player","Not yet.",true],
-      ["Martin","you should eat.",1100],
-      ["Player","I'll eat later.",true],
-      ["Martin","don't forget.",1050],
-      ["Player","I won't.",true],
-      ["Martin","good.",850]
-    ]
-  },
-  {
-    text:"Are you inviting me? 👀",
-    points:3,
-    messages:[
-      ["Player","Are you inviting me? 👀",true],
-      ["Martin","maybe.",1500],
-      ["Player","maybe???",true],
-      ["Martin","I was just asking.",1400],
-      ["Player","sure.",true],
-      ["Martin","don't make this difficult 😭",1500],
-      ["Player","I'm not.",true],
-      ["Martin","you are.",1100]
-    ]
-  }
-];
-
-const finalDM = [
-  ["Martin","anyway.",950],
-  ["Martin","I'll see you later.",1200],
-  ["Player","see you.",true],
-  ["Martin","and [NAME]?",1400],
-  ["Player","yeah?",true],
-  ["Martin","glad you joined the group.",1600],
-  ["Player","why?",true],
-  ["Martin","I don't know.",1000],
+const ep2Final = [
+  ["Martin","anyway.",950],["Martin","I'll see you later.",1200],["Player","see you.",true],
+  ["Martin","and [NAME]?",1400],["Player","yeah?",true],["Martin","glad you joined the group.",1600],
+  ["Player","why?",true],["Martin","I don't know.",1000],
   ["Martin","the group would've been more boring without you.",1900],
-  ["Martin","don't let that get to your head.",1500],
-  ["Player","too late.",true],
-  ["Martin","😭",900]
+  ["Martin","don't let that get to your head.",1500],["Player","too late.",true],["Martin","😭",900]
 ];
 
-function showScreen(screen){
-  Object.values(screens).forEach(s=>s.classList.remove("active"));
-  screen.classList.add("active");
-}
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-function personalize(text){return text.replaceAll("[NAME]",playerName)}
-function scrollBottom(){requestAnimationFrame(()=>chatMessages.scrollTop=chatMessages.scrollHeight)}
-function addDate(text){
-  const d=document.createElement("div"); d.className="date-divider"; d.textContent=text;
-  chatMessages.appendChild(d); scrollBottom();
-}
-function addBubble(sender,text,you=false){
-  const row=document.createElement("div");
-  row.className=`message-row ${you?"you":"them"}`;
-  const b=document.createElement("div"); b.className="bubble";
-  const name=you?"":`<div class="sender-name">${sender}</div>`;
-  b.innerHTML=`${name}${personalize(text)}<span class="message-time">now</span>`;
-  row.appendChild(b); chatMessages.appendChild(row); scrollBottom();
-}
-function addTyping(){
-  const row=document.createElement("div");
-  row.className="typing-row"; row.id="typing-indicator";
-  row.innerHTML=`<div class="typing-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
-  chatMessages.appendChild(row); scrollBottom();
-}
-function removeTyping(){document.getElementById("typing-indicator")?.remove()}
-
-async function sendMessage(m){
-  const [sender,text,third]=m;
-  const you = third === true;
-  const delay = typeof third === "number" ? third : null;
-  if(you){
-    await wait(350);
-    addBubble("Player",text,true);
-    await wait(350);
-    return;
-  }
-  addTyping();
-  await wait(delay ?? Math.min(2600, Math.max(850, 650 + text.length*24)));
-  removeTyping();
-  addBubble(sender,text,false);
-  await wait(500);
-}
-async function playMessages(list){
-  for(const m of list) await sendMessage(m);
-}
-function showChoices(data, callback, label="How do you respond?"){
-  choiceLabel.textContent=label;
-  choices.innerHTML="";
-  data.forEach(item=>{
-    const btn=document.createElement("button");
-    btn.className="choice";
-    btn.textContent=personalize(item.text);
-    btn.onclick=()=>callback(item);
-    choices.appendChild(btn);
-  });
-  choiceArea.classList.remove("hidden"); scrollBottom();
-}
-function hideChoices(){choiceArea.classList.add("hidden")}
-function setChatMode(title, status, letter="M"){
-  chatTitle.textContent=title; statusText.textContent=status; avatar.textContent=letter;
-}
-
-async function beginStory(){
-  const value=nameInput.value.trim();
-  if(!value){nameError.textContent="Tell me your name first.";nameInput.focus();return}
-  playerName=value; martinAffection=0; nameError.textContent="";
-  showScreen(screens.chat); chatMessages.innerHTML="";
-  setChatMode("UMN Freshman Orientation","online","U");
-  await wait(650);
-  addDate("SEPTEMBER 2020 · 7:41 AM");
-  await playMessages(groupMorning);
-
+async function episode2(){
+  await transitionTo("UMN Freshman Orientation","online","U","SEPTEMBER 2020 · 7:41 AM");
+  await playMessages(ep2Morning);
   await sendMessage(["Martin","[NAME], are you joining already?",1100]);
-  showChoices(choice1, async selected=>{
-    hideChoices(); martinAffection+=selected.points;
-    await playMessages(selected.messages);
-    await playMessages(afterChoice1);
+  showChoices(ep2Choice1,async c1=>{
+    hideChoices();martinAffection+=c1.points;await playMessages(c1.msg);await playMessages(ep2After1);
 
-    // Transition: group chat -> Martin DM
-    await wait(1000);
-    chatMessages.innerHTML="";
-    setChatMode("Martin","online","M");
-    addDate("PRIVATE CHAT · 8:03 AM");
-    await wait(900);
-    await playMessages(privateIntro);
+    await transitionTo("Martin","online","M","PRIVATE CHAT · 8:03 AM");
+    await playMessages(ep2PrivateIntro);
+    showChoices(ep2Choice2,async c2=>{
+      hideChoices();martinAffection+=c2.points;
+      await playMessages(c2.msg);await wait(650);
+      await playMessages([
+        ["Martin","they're talking about campus organizations now.",1400],
+        ["Player","already?",true],["Martin","apparently.",900],
+        ["Player","have you thought about joining one?",1500],
+        ["Martin","maybe.",900],["Player","which one?",true],
+        ["Martin","not sure yet.",1000],["Martin","you?",1100]
+      ]);
+      showChoices(ep2Choice3,async c3=>{
+        hideChoices();martinAffection+=c3.points;await playMessages(c3.msg);
 
-    showChoices(choice2, async selected2=>{
-      hideChoices(); martinAffection+=selected2.points;
-      await playMessages(selected2.messages);
-      await wait(650);
-      await playMessages(privateChoice3Intro);
-
-      showChoices(choice3, async selected3=>{
-        hideChoices(); martinAffection+=selected3.points;
-        await playMessages(selected3.messages);
-
-        // Back to group chat
-        await wait(1200);
-        chatMessages.innerHTML="";
-        setChatMode("UMN Freshman Orientation","online","U");
-        addDate("SEPTEMBER 2020 · 10:16 AM");
-        await wait(700);
-        await playMessages(groupEnd);
-
+        await transitionTo("UMN Freshman Orientation","online","U","SEPTEMBER 2020 · 10:16 AM");
+        await playMessages(ep2GroupEnd);
         await sendMessage(["Martin","[NAME], you eating too?",1300]);
-        showChoices(choice4, async selected4=>{
-          hideChoices(); martinAffection+=selected4.points;
-          await playMessages(selected4.messages);
+        showChoices(ep2Choice4,async c4=>{
+          hideChoices();martinAffection+=c4.points;await playMessages(c4.msg);
 
-          // Final private chat
-          await wait(1200);
-          chatMessages.innerHTML="";
-          setChatMode("Martin","online","M");
-          addDate("PRIVATE CHAT · 10:29 AM");
-          await wait(800);
-          await playMessages(finalDM);
-
+          await transitionTo("Martin","online","M","PRIVATE CHAT · 10:29 AM");
+          await playMessages(ep2Final);
           await wait(1800);
           statusText.textContent="last seen just now";
           await wait(700);
@@ -406,7 +346,7 @@ async function beginStory(){
 }
 
 startBtn.onclick=()=>{showScreen(screens.name);setTimeout(()=>nameInput.focus(),250)}
-nameBtn.onclick=beginStory;
-nameInput.onkeydown=e=>{if(e.key==="Enter")beginStory()}
+nameBtn.onclick=()=>{const n=nameInput.value.trim();if(!n){nameError.textContent="Tell me your name first.";nameInput.focus();return}playerName=n;nameError.textContent="";martinAffection=0;showScreen(screens.chat);episode1()}
+nameInput.onkeydown=e=>{if(e.key==="Enter")nameBtn.click()}
 replayBtn.onclick=()=>{nameInput.value="";nameError.textContent="";showScreen(screens.welcome)}
-backBtn.onclick=()=>showScreen(screens.name);
+backBtn.onclick=()=>showScreen(screens.name)
