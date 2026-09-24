@@ -126,7 +126,7 @@ function appendTyping(chat, who) {
   return row;
 }
 
-async function message(chat, who, text, time, {typing=true, delay=1800, after=900}={}) {
+async function message(chat, who, text, time, {typing=true, delay=1800, after=700}={}) {
   const rendered = playerText(text);
   const me = who === 'Player';
 
