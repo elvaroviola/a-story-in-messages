@@ -1173,7 +1173,7 @@ const assignment = document.getElementById('chat');
   await message(assignment,'Martin',"What's the topic?",'10:34 AM');
   await message(assignment,'Silvia','Social media and communication.','10:34 AM');
   await message(assignment,'Player',"That's actually pretty relevant.",'10:35 AM');
-  await message(assignment',"Keonho","We're communication science students.",'10:35 AM');
+  await message(assignment,'Keonho',"We're communication science students.",'10:35 AM');
   await message(assignment,'Keonho','Everything is relevant to us.','10:35 AM');
   await message(assignment,'Elvaro','Except sleep.','10:36 AM');
   await message(assignment,'Keonho','Exactly.','10:36 AM');
