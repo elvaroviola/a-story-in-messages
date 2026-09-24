@@ -1095,7 +1095,7 @@ async function runEpisode4() {
     });
   });
 } 
-function runEpisode5() {
+async function runEpisode5() {
   state.episode = 5;
 
   chatShell({
