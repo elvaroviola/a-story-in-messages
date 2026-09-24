@@ -56,25 +56,6 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
   width:48px;height:48px;min-width:48px;min-height:48px;
   border-radius:50%;object-fit:cover;background:#20232c;flex:none;display:block;
 }
-.group-icon{
-  width:48px;
-  height:48px;
-  min-width:48px;
-  min-height:48px;
-  border-radius:50%;
-  overflow:hidden;
-  background:#20232c;
-  flex:none;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-.group-icon img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-}
 .header-copy{min-width:0;flex:1}
 .header-name{font-size:18px;font-weight:700;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-status{font-size:12px;color:#77b98d;margin-top:4px}
@@ -112,30 +93,6 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
   font-size:15px;line-height:1.45;color:#f3f3f5;
   box-shadow:0 5px 18px rgba(0,0,0,.12);
   overflow-wrap:anywhere;word-break:break-word;
-.system-card{
-  width:100%;
-  text-align:center;
-  color:#d8d9df;
-  margin:18px 0;
-  line-height:1.45;
-  border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.02);
-  border-radius:10px;
-  padding:12px 14px;
-  box-sizing:border-box;
-}
-.system-time{
-  font-size:10px;
-  color:#777c88;
-  letter-spacing:.08em;
-  margin-bottom:4px;
-  text-align:center;
-}
-.system-card > div:last-child{
-  font-size:13px;
-  font-weight:600;
-  text-align:center;
-  color:#d8d9df;
 }
 .me .bubble{background:#e5d8df;color:#171319;border-radius:18px 7px 18px 18px}
 .time{font-size:10px;color:#6e737f;margin-top:5px}
@@ -179,12 +136,44 @@ button.choice{
   line-height:1.4;
   text-align:left;
   cursor:pointer;
+  transition:.2s;
 }
 button.choice:hover{
   border-color:rgba(217,169,186,.55);
   background:#151922;
   transform:translateY(-1px);
 }
+
+.system-card{
+  width:100%;
+  text-align:center;
+  color:#d8d9df;
+  margin:18px 0;
+  line-height:1.45;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02);
+  border-radius:10px;
+  padding:12px 14px;
+  box-sizing:border-box;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+.system-time{
+  font-size:10px;
+  color:#777c88;
+  letter-spacing:.08em;
+  margin-bottom:4px;
+  text-align:center;
+}
+.system-card > div:last-child{
+  font-size:13px;
+  font-weight:600;
+  text-align:center;
+  color:#d8d9df;
+  white-space:pre-line;
+}
+
+
 .episode-card{
   width:100%;max-width:520px;min-height:100dvh;
   display:flex;align-items:center;justify-content:center;
@@ -195,12 +184,25 @@ button.choice:hover{
 .episode-card .conclusion{font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-top:16px}
 .timeline{margin:18px auto 0;border:1px solid var(--line);border-radius:18px;padding:14px 16px;color:#b6b8c0;font-size:12px;line-height:1.7;max-width:330px}
 .group-icon{
-  width:52px;height:52px;min-width:52px;min-height:52px;
-  border-radius:16px;background:linear-gradient(135deg,#292531,#171821);
-  display:grid;place-items:center;font-family:'Playfair Display',serif;
-  font-size:18px;color:#e9dbe1;border:1px solid var(--line);overflow:hidden;
+  width:48px;
+  height:48px;
+  min-width:48px;
+  min-height:48px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#20232c;
+  border:1px solid var(--line);
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
 }
-.group-icon img{width:100%;height:100%;object-fit:cover;display:block}
+.group-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 .small-note{font-size:11px;color:#707581;margin-top:12px}
 .status{position:absolute;top:12px;right:14px;font-size:10px;color:#666b76}
 

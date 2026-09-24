@@ -100,7 +100,7 @@ function chatShell({type='group', name, status='online', avatar=null, subtitle='
     <div class="chat-page fade">
       <header class="chat-header">
         ${isGroup
-          ? `<div class="group-icon"><img src="assets/group-profile.png" alt="Group"></div>`
+          ? `<div class="group-icon"><img src="assets/group-profile.jpg" alt="Group"></div>`
           : `<img class="avatar" src="${avatar}" alt="${esc(name)}">`}
         <div class="header-copy">
           <div class="header-name">${esc(name)}</div>
