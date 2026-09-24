@@ -56,6 +56,25 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
   width:48px;height:48px;min-width:48px;min-height:48px;
   border-radius:50%;object-fit:cover;background:#20232c;flex:none;display:block;
 }
+.group-icon{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  min-height:48px;
+  border-radius:50%;
+  overflow:hidden;
+  background:#20232c;
+  flex:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.group-icon img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 .header-copy{min-width:0;flex:1}
 .header-name{font-size:18px;font-weight:700;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .header-status{font-size:12px;color:#77b98d;margin-top:4px}
