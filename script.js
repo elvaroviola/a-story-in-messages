@@ -1157,32 +1157,32 @@ chatShell({
   subtitle: 'WEEK 5 · 10:30 AM — GROUP CHAT'
 });
 
-const group = document.getElementById('chat');
+const assignment = document.getElementById('chat');
 
-  await message(group,'Silvia','GUYS.','10:30 AM');
-  await message(group,'Keonho','No.','10:30 AM');
-  await message(group,"Silvia","You don't even know what I'm going to say.",'10:31 AM');
-  await message(group,'Keonho','I know you.','10:31 AM');
-  await message(group,'Elvaro',"That's fair.",'10:31 AM');
-  await message(group,'Silvia','We have another assignment.','10:32 AM');
-  await message(group,'Keonho','I KNEW IT.','10:32 AM');
-  await message(group,'Seonghyeon','What is it?','10:32 AM');
-  await message(group,'Silvia','Group discussion next week.','10:33 AM');
-  await message(group,"Keonho","I'm dropping out.",'10:33 AM');
-  await message(group,'Elvaro','You said that last time.','10:33 AM');
-  await message(group,'Keonho','This time I mean it.','10:34 AM');
-  await message(group,'Martin',"What's the topic?",'10:34 AM');
-  await message(group,'Silvia','Social media and communication.','10:34 AM');
-  await message(group,'Player',"That's actually pretty relevant.",'10:35 AM');
-  await message(group',"Keonho","We're communication science students.",'10:35 AM');
-  await message(group,'Keonho','Everything is relevant to us.','10:35 AM');
-  await message(group,'Elvaro','Except sleep.','10:36 AM');
-  await message(group,'Keonho','Exactly.','10:36 AM');
-  await message(group,'Seonghyeon','When is the deadline?','10:36 AM');
-  await message(group,'Silvia','Friday.','10:37 AM');
-  await message(group,'Keonho','I hate Friday.','10:37 AM');
-  await message(group,"Martin","It's Monday.",'10:37 AM');
-  await message(group,'Keonho','Exactly.','10:38 AM');
+  await message(assignment,'Silvia','GUYS.','10:30 AM');
+  await message(assignment,'Keonho','No.','10:30 AM');
+  await message(assignment,"Silvia","You don't even know what I'm going to say.",'10:31 AM');
+  await message(assignment,'Keonho','I know you.','10:31 AM');
+  await message(assignment,'Elvaro',"That's fair.",'10:31 AM');
+  await message(assignment,'Silvia','We have another assignment.','10:32 AM');
+  await message(assignment,'Keonho','I KNEW IT.','10:32 AM');
+  await message(assignment,'Seonghyeon','What is it?','10:32 AM');
+  await message(assignment,'Silvia','Group discussion next week.','10:33 AM');
+  await message(assignment,"Keonho","I'm dropping out.",'10:33 AM');
+  await message(assignment,'Elvaro','You said that last time.','10:33 AM');
+  await message(assignment,'Keonho','This time I mean it.','10:34 AM');
+  await message(assignment,'Martin',"What's the topic?",'10:34 AM');
+  await message(assignment,'Silvia','Social media and communication.','10:34 AM');
+  await message(assignment,'Player',"That's actually pretty relevant.",'10:35 AM');
+  await message(assignment',"Keonho","We're communication science students.",'10:35 AM');
+  await message(assignment,'Keonho','Everything is relevant to us.','10:35 AM');
+  await message(assignment,'Elvaro','Except sleep.','10:36 AM');
+  await message(assignment,'Keonho','Exactly.','10:36 AM');
+  await message(assignment,'Seonghyeon','When is the deadline?','10:36 AM');
+  await message(assignment,'Silvia','Friday.','10:37 AM');
+  await message(assignment,'Keonho','I hate Friday.','10:37 AM');
+  await message(assignment,"Martin","It's Monday.",'10:37 AM');
+  await message(assignment,'Keonho','Exactly.','10:38 AM');
 
 showChoices([
   {
@@ -1202,8 +1202,8 @@ showChoices([
   }
 ], async choice => {
   choice.effect();
-  await message(group,'Player',choice.text,'10:39 AM');
-  await message(group,'Martin',choice.response,'10:39 AM');
+  await message(assignment,'Player',choice.text,'10:39 AM');
+  await message(assignment,'Martin',choice.response,'10:39 AM');
 
 
   // =========================
