@@ -162,7 +162,29 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
   cursor:pointer;transition:.2s;
 }
 .choice:hover{border-color:rgba(217,169,186,.55);transform:translateY(-1px)}
-
+button.choice{
+  appearance:none;
+  -webkit-appearance:none;
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  border:1px solid var(--line);
+  background:#11141b;
+  color:#f2f2f4;
+  border-radius:14px;
+  padding:13px 14px;
+  margin:5px 0;
+  font:inherit;
+  font-size:14px;
+  line-height:1.4;
+  text-align:left;
+  cursor:pointer;
+}
+button.choice:hover{
+  border-color:rgba(217,169,186,.55);
+  background:#151922;
+  transform:translateY(-1px);
+}
 .episode-card{
   width:100%;max-width:520px;min-height:100dvh;
   display:flex;align-items:center;justify-content:center;
