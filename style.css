@@ -93,13 +93,17 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
   font-size:15px;line-height:1.45;color:#f3f3f5;
   box-shadow:0 5px 18px rgba(0,0,0,.12);
   overflow-wrap:anywhere;word-break:break-word;
-}
 .system-card{
   width:100%;
   text-align:center;
   color:#d8d9df;
   margin:18px 0;
   line-height:1.45;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.02);
+  border-radius:10px;
+  padding:12px 14px;
+  box-sizing:border-box;
 }
 .system-time{
   font-size:10px;
