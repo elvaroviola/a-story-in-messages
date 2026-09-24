@@ -1090,6 +1090,391 @@ async function runEpisode4() {
         'A LITTLE HABIT',
         'Somewhere between busy schedules and ordinary days, talking to each other started to feel less like a coincidence.',
         'CONTINUE',
+        () => runEpisode5()
+      );
+    });
+  });
+}
+
+async function playMessages(chat, lines) {
+  for (const [who, text, time] of lines) {
+    await message(chat, who, text, time);
+  }
+}
+
+async function runEpisode5() {
+  state.episode = 5;
+
+  // WEEK 5 — NOVEMBER 2020
+  // Pandemic setting: everyone is still studying from home.
+  chatShell({
+    type: 'dm',
+    name: 'Martin',
+    status: 'online',
+    avatar: profiles.Martin,
+    subtitle: 'WEEK 5 · 08:16 AM — PRIVATE CHAT'
+  });
+  const morning = document.getElementById('chat');
+
+  await playMessages(morning, [
+    ['Martin','Morning.','08:16 AM'],
+    ['Player','Morning.','08:16 AM'],
+    ['Martin','Did you sleep?','08:16 AM'],
+    ['Player','Barely.','08:17 AM'],
+    ['Martin','Same.','08:17 AM'],
+    ['Player','Then why are you texting me this early?','08:17 AM'],
+    ['Martin',"I don't know.",'08:17 AM'],
+    ['Player','Suspicious.','08:17 AM'],
+    ['Martin','Maybe I just wanted to.','08:18 AM'],
+    ['Player','You really are making this a habit.','08:18 AM'],
+    ['Martin','I told you.','08:18 AM'],
+    ['Player','You did.','08:18 AM'],
+    ['Martin',"And you didn't complain.",'08:18 AM'],
+    ['Player','Yet.','08:18 AM'],
+    ['Martin',"I'll take that as a good sign.",'08:18 AM'],
+    ['Martin','Wait.','08:19 AM'],
+    ['Martin','I have something for you.','08:19 AM'],
+    ['Player','What?','08:19 AM'],
+    ['Martin','Remember yesterday?','08:19 AM'],
+    ['Player','What about yesterday?','08:20 AM'],
+    ['Martin','You said you were tired.','08:20 AM'],
+    ['Player','Oh.','08:20 AM'],
+    ['Martin','So today—','08:20 AM'],
+    ['Martin',"Don't overwork yourself.",'08:20 AM'],
+    ['Player',"That's it?",'08:20 AM'],
+    ['Martin',"That's it.",'08:21 AM'],
+    ['Player','I thought you were going to send me chocolate or something.','08:21 AM'],
+    ['Martin',"I would've.",'08:21 AM'],
+    ['Player',"Would've?",'08:21 AM'],
+    ['Martin','If I could.','08:21 AM'],
+    ['Player','...','08:22 AM'],
+    ['Martin','Pandemic problems.','08:22 AM'],
+    ['Player','True.','08:22 AM'],
+    ['Martin','So for now, this is all I can do.','08:22 AM'],
+    ['Player','Tell me not to overwork?','08:22 AM'],
+    ['Martin','Exactly.','08:22 AM'],
+    ['Player',"You're weird.",'08:23 AM'],
+    ['Martin','I know.','08:23 AM']
+  ]);
+
+  chatShell({
+    type: 'group',
+    name: group.name,
+    status: group.status,
+    subtitle: '10:30 AM — GROUP CHAT'
+  });
+  const groupChat = document.getElementById('chat');
+
+  await playMessages(groupChat, [
+    ['Silvia','GUYS.','10:30 AM'],
+    ['Keonho','No.','10:30 AM'],
+    ['Silvia',"You don't even know what I'm going to say.",'10:30 AM'],
+    ['Keonho','I know you.','10:30 AM'],
+    ['Elvaro',"That's fair.",'10:30 AM'],
+    ['Silvia','We have another assignment.','10:30 AM'],
+    ['Keonho','I KNEW IT.','10:30 AM'],
+    ['Seonghyeon','What is it?','10:30 AM'],
+    ['Silvia','Group discussion next week.','10:30 AM'],
+    ['Keonho',"I'm dropping out.",'10:30 AM'],
+    ['Elvaro','You said that last time.','10:30 AM'],
+    ['Keonho','This time I mean it.','10:30 AM'],
+    ['Martin',"What's the topic?",'10:30 AM'],
+    ['Silvia','Social media and communication.','10:31 AM'],
+    ['Player',"That's actually pretty relevant.",'10:31 AM'],
+    ['Keonho',"We're communication science students.",'10:31 AM'],
+    ['Keonho','Everything is relevant to us.','10:31 AM'],
+    ['Elvaro','Except sleep.','10:31 AM'],
+    ['Keonho','Exactly.','10:31 AM'],
+    ['Seonghyeon','When is the deadline?','10:31 AM'],
+    ['Silvia','Friday.','10:31 AM'],
+    ['Keonho','I hate Friday.','10:31 AM'],
+    ['Martin',"It's Monday.",'10:31 AM'],
+    ['Keonho','Exactly.','10:31 AM']
+  ]);
+
+  showChoices([
+    {text:"Let's get it done early.", response:'I like that.', effect:()=>state.affection+=1},
+    {text:"Can we pretend Friday doesn't exist?", response:"I'd support that.", effect:()=>state.affection+=1},
+    {text:"I'll just follow you guys.", response:"We'll make sure you don't get left behind.", effect:()=>state.trust+=1}
+  ], async choice => {
+    choice.effect();
+    await message(groupChat,'Player',choice.text,'10:32 AM');
+    await message(groupChat,'Martin',choice.response,'10:32 AM');
+
+    chatShell({
+      type: 'group',
+      name: group.name,
+      status: group.status,
+      subtitle: '01:24 PM — GROUP CHAT'
+    });
+    const afternoon = document.getElementById('chat');
+
+    await playMessages(afternoon, [
+      ['Silvia','Okay. We need to divide this.','01:24 PM'],
+      ['Seonghyeon',"I'll handle the theory.",'01:24 PM'],
+      ['Elvaro',"I'll find examples.",'01:24 PM'],
+      ['Keonho',"I'll make the presentation.",'01:24 PM'],
+      ['Silvia',"I'll do the introduction and conclusion.",'01:24 PM'],
+      ['Martin',"I'll organize everything.",'01:24 PM'],
+      ['Player','What should I do?','01:25 PM'],
+      ['Martin','You can help me.','01:25 PM'],
+      ['Keonho','Again?','01:25 PM'],
+      ['Martin','What?','01:25 PM'],
+      ['Silvia','You two are becoming a package deal.','01:25 PM'],
+      ['Player','😭','01:25 PM'],
+      ['Martin','Can everyone stop making it weird?','01:25 PM'],
+      ['Elvaro',"We're not doing anything.",'01:25 PM'],
+      ['Keonho','Yet.','01:25 PM'],
+      ['Martin','I hate you.','01:25 PM'],
+      ['Keonho','Love you too.','01:25 PM']
+    ]);
+
+    chatShell({
+      type: 'dm',
+      name: 'Martin',
+      status: 'online',
+      avatar: profiles.Martin,
+      subtitle: '03:17 PM — PRIVATE CHAT'
+    });
+    const privateChat = document.getElementById('chat');
+
+    await playMessages(privateChat, [
+      ['Martin','You okay?','03:17 PM'],
+      ['Player','Yeah.','03:17 PM'],
+      ['Martin','You sure?','03:18 PM'],
+      ['Player','Why?','03:18 PM'],
+      ['Martin','You got quiet.','03:18 PM'],
+      ['Player',"I'm just tired.",'03:18 PM'],
+      ['Martin','From class?','03:18 PM'],
+      ['Player','Everything, I guess.','03:19 PM'],
+      ['Martin','University?','03:19 PM'],
+      ['Player','Yeah.','03:19 PM'],
+      ['Player',"It's just—",'03:19 PM'],
+      ['Player',"I thought I'd be more prepared for this.",'03:20 PM'],
+      ['Martin','For what?','03:20 PM'],
+      ['Player','Being a university student.','03:20 PM'],
+      ['Player','Everything feels new.','03:20 PM'],
+      ['Player',"And because everything is online, sometimes it doesn't even feel real.",'03:21 PM'],
+      ['Martin','I get that.','03:21 PM'],
+      ['Player','Do you?','03:21 PM'],
+      ['Martin','Yeah.','03:21 PM'],
+      ['Martin','Sometimes I wake up, open my laptop, attend class, close it—','03:22 PM'],
+      ['Martin',"and that's my entire university experience.",'03:22 PM'],
+      ['Player','Exactly.','03:22 PM'],
+      ['Martin','But—','03:22 PM'],
+      ['Player','But?','03:22 PM'],
+      ['Martin','At least I met you guys.','03:23 PM'],
+      ['Player','...','03:23 PM'],
+      ['Martin',"That's probably the closest thing to a real university experience right now.",'03:23 PM'],
+      ['Player',"That's actually kind of sweet.",'03:24 PM'],
+      ['Martin',"Don't tell anyone.",'03:24 PM'],
+      ['Player','Too late.','03:24 PM'],
+      ['Martin','😭','03:24 PM'],
+      ['Martin','Can I ask you something?','03:25 PM']
+    ]);
+
+    showChoices([
+      {text:'Sure.', effect:()=>state.trust+=1},
+      {text:'That sounds suspicious again.', effect:()=>state.affection+=1},
+      {text:'Depends.', effect:()=>state.compatibility+=1}
+    ], async choice2 => {
+      choice2.effect();
+      await message(privateChat,'Player',choice2.text,'03:25 PM');
+
+      await playMessages(privateChat, [
+        ['Martin','Do you ever feel lonely?','03:26 PM'],
+        ['Player','Sometimes.','03:26 PM'],
+        ['Martin','Me too.','03:26 PM'],
+        ['Player',"You don't seem lonely.",'03:27 PM'],
+        ['Martin','I am sometimes.','03:27 PM'],
+        ['Player','You have everyone in the group.','03:27 PM'],
+        ['Martin',"That's different.",'03:27 PM'],
+        ['Player','How?','03:28 PM'],
+        ['Martin','I can talk to them.','03:28 PM'],
+        ['Martin','But—','03:28 PM'],
+        ['Martin',"I don't always want to talk to everyone.",'03:29 PM'],
+        ['Player','Then who do you want to talk to?','03:29 PM'],
+        ['Martin','...','03:29 PM'],
+        ['Martin','You.','03:30 PM'],
+        ['Player','Oh.','03:30 PM'],
+        ['Martin','Sorry.','03:30 PM'],
+        ['Player','Why are you apologizing?','03:31 PM'],
+        ['Martin',"I don't know.",'03:31 PM'],
+        ['Player','You do that a lot.','03:31 PM'],
+        ['Martin','Do what?','03:31 PM'],
+        ['Player','Say something honest and then immediately panic.','03:32 PM'],
+        ['Martin',"Maybe because you're scary.",'03:32 PM'],
+        ['Player','Me???','03:32 PM'],
+        ['Martin','A little.','03:33 PM'],
+        ['Player','How?','03:33 PM'],
+        ['Martin',"You make me say things I normally wouldn't.",'03:34 PM'],
+        ['Player','...','03:34 PM'],
+        ['Martin','See?','03:34 PM'],
+        ['Martin',"Now you're quiet.",'03:34 PM'],
+        ['Player',"I'm processing.",'03:35 PM'],
+        ['Martin','Take your time.','03:35 PM']
+      ]);
+
+      chatShell({
+        type: 'group',
+        name: group.name,
+        status: group.status,
+        subtitle: '06:42 PM — GROUP CHAT'
+      });
+      const eveningGroup = document.getElementById('chat');
+
+      await playMessages(eveningGroup, [
+        ['Silvia',"How's everyone?",'06:42 PM'],
+        ['Keonho','Alive.','06:42 PM'],
+        ['Elvaro','Barely.','06:42 PM'],
+        ['Seonghyeon','I finished my part.','06:42 PM'],
+        ['Silvia','WHAT.','06:42 PM'],
+        ['Keonho',"Teacher's pet.",'06:42 PM'],
+        ['Seonghyeon',"I'm just organized.",'06:43 PM'],
+        ['Martin','Player and I finished ours too.','06:43 PM'],
+        ['Keonho','"Player and I"','06:43 PM'],
+        ['Silvia','👀','06:43 PM'],
+        ['Elvaro','Again.','06:43 PM'],
+        ['Martin','Please.','06:43 PM'],
+        ['Keonho','No.','06:43 PM'],
+        ['Player','You guys are annoying.','06:43 PM'],
+        ['Silvia',"We're just observing.",'06:43 PM'],
+        ['Martin','Stop observing.','06:43 PM'],
+        ['Keonho','Never.','06:43 PM']
+      ]);
+
+      chatShell({
+        type: 'dm',
+        name: 'Martin',
+        status: 'online',
+        avatar: profiles.Martin,
+        subtitle: '09:18 PM — PRIVATE CHAT'
+      });
+      const night = document.getElementById('chat');
+
+      await playMessages(night, [
+        ['Martin','Hey.','09:18 PM'],
+        ['Player','Hey.','09:18 PM'],
+        ['Martin','Are you busy?','09:18 PM'],
+        ['Player','Not really.','09:19 PM'],
+        ['Martin','Can I ask you something weird?','09:19 PM'],
+        ['Player','You always ask weird things.','09:19 PM'],
+        ['Martin','Fair.','09:19 PM'],
+        ['Martin','Would you—','09:20 PM'],
+        ['Martin','Actually never mind.','09:20 PM'],
+        ['Player','No.','09:20 PM'],
+        ['Martin','What?','09:20 PM'],
+        ['Player','You started it.','09:20 PM'],
+        ['Martin','I know.','09:20 PM'],
+        ['Player','Finish it.','09:21 PM'],
+        ['Martin','Would you want to call?','09:21 PM'],
+        ['Player','Call?','09:21 PM'],
+        ['Martin','Yeah.','09:21 PM'],
+        ['Player','Like—','09:21 PM'],
+        ['Player','voice call?','09:21 PM'],
+        ['Martin','Yeah.','09:21 PM'],
+        ['Player','Why?','09:22 PM'],
+        ['Martin',"I don't know.",'09:22 PM'],
+        ['Player','You say that a lot.','09:22 PM'],
+        ['Martin',"Because it's true.",'09:22 PM'],
+        ['Player',"That's suspicious.",'09:23 PM'],
+        ['Martin','You can say no.','09:23 PM'],
+        ['Player','...','09:23 PM'],
+        ['Martin','Seriously.','09:23 PM'],
+        ['Player','Okay.','09:24 PM'],
+        ['Martin','Okay?','09:24 PM'],
+        ['Player','Yeah.','09:24 PM'],
+        ['Martin','Really?','09:24 PM'],
+        ['Player','Why are you surprised?','09:24 PM'],
+        ['Martin',"I thought you'd make fun of me first.",'09:24 PM'],
+        ['Player','I still might.','09:24 PM'],
+        ['Martin','Fair.','09:24 PM']
+      ]);
+
+      await systemMessage(night,'09:24 PM','VOICE CALL STARTED');
+
+      await playMessages(night, [
+        ['Martin','Hi.','09:25 PM'],
+        ['Player','Hi.','09:25 PM'],
+        ['Martin','This is weird.','09:25 PM'],
+        ['Player','Very.','09:25 PM'],
+        ['Martin','You sound different.','09:26 PM'],
+        ['Player','Different how?','09:26 PM'],
+        ['Martin',"I don't know.",'09:26 PM'],
+        ['Player',"That's not helpful.",'09:26 PM'],
+        ['Martin','You sound—','09:27 PM'],
+        ['Martin','real.','09:27 PM'],
+        ['Player','...','09:27 PM'],
+        ['Martin','Sorry.','09:27 PM'],
+        ['Player','No.','09:28 PM'],
+        ['Player','I get what you mean.','09:28 PM'],
+        ['Martin','Good.','09:28 PM'],
+        ['Player','You sound different too.','09:29 PM'],
+        ['Martin','Bad different?','09:29 PM'],
+        ['Player','No.','09:29 PM'],
+        ['Player','Just...','09:29 PM'],
+        ['Player','nicer.','09:30 PM'],
+        ['Martin','Oh.','09:30 PM'],
+        ['Player',"Don't get used to that compliment.",'09:30 PM'],
+        ['Martin','Too late.','09:30 PM'],
+        ['Martin','So.','09:31 PM'],
+        ['Player','So?','09:31 PM'],
+        ['Martin',"What's your favorite thing about university so far?",'09:31 PM'],
+        ['Player',"That's a difficult question.",'09:32 PM'],
+        ['Martin','Why?','09:32 PM'],
+        ['Player',"Because technically I've barely experienced university.",'09:32 PM'],
+        ['Martin','Fair.','09:33 PM'],
+        ['Player','But—','09:33 PM'],
+        ['Martin','But?','09:33 PM'],
+        ['Player','Meeting you guys was nice.','09:34 PM'],
+        ['Martin','Yeah.','09:34 PM'],
+        ['Player',"Even though it's all online.",'09:34 PM'],
+        ['Martin','Yeah.','09:35 PM'],
+        ['Player',"I think I'd miss this if it wasn't there.",'09:35 PM'],
+        ['Martin','The group?','09:36 PM'],
+        ['Player','...','09:36 PM'],
+        ['Player','Maybe.','09:37 PM'],
+        ['Martin','Maybe?','09:37 PM'],
+        ['Player',"Don't push it.",'09:37 PM'],
+        ['Martin','Okay.','09:38 PM'],
+        ['Martin',"I'll let you have that one.",'09:38 PM']
+      ]);
+
+      await playMessages(night, [
+        ['Martin',"It's getting late.",'10:47 PM'],
+        ['Player','Yeah.','10:47 PM'],
+        ['Martin','We should sleep.','10:47 PM'],
+        ['Player','Probably.','10:48 PM'],
+        ['Martin','But—','10:48 PM'],
+        ['Player','But?','10:48 PM'],
+        ['Martin',"I'm glad I asked.",'10:49 PM'],
+        ['Player','Me too.','10:49 PM'],
+        ['Martin','Goodnight.','10:50 PM'],
+        ['Player','Goodnight, Martin.','10:50 PM'],
+        ['Martin','Goodnight, [NAME].','10:51 PM'],
+        ['Player','Sleep well.','10:51 PM'],
+        ['Martin','You too.','10:51 PM']
+      ]);
+
+      await sleep(1200);
+      await playMessages(night, [
+        ['Martin','Oh.','10:53 PM'],
+        ['Player','What?','10:53 PM'],
+        ['Martin','Nothing.','10:53 PM'],
+        ['Player','Martin.','10:53 PM'],
+        ['Martin','I just wanted to say—','10:54 PM'],
+        ['Martin','Talk tomorrow?','10:54 PM'],
+        ['Player','Yeah.','10:54 PM'],
+        ['Martin','Okay.','10:54 PM'],
+        ['Player','Goodnight.','10:54 PM'],
+        ['Martin','Goodnight.','10:54 PM']
+      ]);
+
+      endEpisode(
+        5,
+        'THE CALL',
+        "Sometimes, getting closer doesn't mean saying more. Sometimes, it simply means choosing to stay a little longer.",
+        'CONTINUE',
         () => replayPrompt()
       );
     });
@@ -1099,11 +1484,12 @@ async function runEpisode4() {
 function replayPrompt() {
   screen.innerHTML = `
     <div class="screen center fade">
-      <div class="eyebrow">✦ END OF EPISODE 04</div>
-      <h1>Episode 4<br><span class="script">complete.</span></h1>
+      <div class="eyebrow">✦ END OF EPISODE 05</div>
+      <h1>Episodes 1–5<br><span class="script">complete.</span></h1>
       <p class="subtitle">The story will continue from here.</p>
       <button class="primary" id="replay">REPLAY FROM START</button>
     </div>`;
   document.getElementById('replay').onclick = () => location.reload();
 }
+
 startScreen();
