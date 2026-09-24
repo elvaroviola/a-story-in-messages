@@ -25,12 +25,13 @@ body{
 }
 
 #screen{
-  width:100%;
-  max-width:390px;
+  width:390px;
+  max-width:100vw;
   height:100vh;
   min-height:0;
   background:#090a0f;
   overflow:hidden;
+  margin:0 auto;
 }
 
 button,input{font:inherit}
@@ -292,9 +293,11 @@ button{-webkit-tap-highlight-color:transparent}
 }
 
 .sender{
-  color:#8d92a0;
-  font-size:11px;
-  margin:0 0 4px 2px;
+  color:#a5a8b2;
+  font-size:13px;
+  font-weight:600;
+  line-height:1.25;
+  margin:0 0 5px 2px;
 }
 
 .bubble{
@@ -429,7 +432,11 @@ button.choice:hover{
 button.choice:active{transform:translateY(0)}
 
 @media (max-width:390px){
-  #screen,.chat-page{max-width:100vw}
+  #screen,
+  .chat-page{
+    width:100vw;
+    max-width:100vw;
+  }
 }
 
 @media (max-width:600px){
