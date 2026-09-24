@@ -1148,7 +1148,6 @@ async function runEpisode5() {
   await message(morning,'Martin','Exactly.','08:27 AM');
   await message(morning,'Player',"You're weird.",'08:28 AM');
   await message(morning,'Martin','I know.','08:28 AM');
-}
 
 chatShell({
   type: 'group',
