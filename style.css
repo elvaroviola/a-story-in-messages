@@ -72,7 +72,7 @@ h1{font-family:'Playfair Display',serif;font-weight:500;font-size:48px;line-heig
 .msg-row{
   width:100%;max-width:100%;
   display:flex;gap:8px;margin:0 0 18px;
-  align-items:flex-end;min-width:0;
+  align-items:flex-start;min-width:0;
 }
 .msg-row.me{justify-content:flex-end}
 .msg-avatar{
