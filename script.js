@@ -195,7 +195,7 @@ async function runEpisode1() {
   });
 
   const chat = document.getElementById('chat');
-
+  
   await message(chat,'Silvia','wait.','8:32 PM');
   await message(chat,'Keonho','what?','8:32 PM');
   await message(chat,'Silvia','Martin???','8:32 PM');
@@ -272,7 +272,7 @@ async function runEpisode1() {
     await message(chat,'Silvia','The committee sent the schedule.','9:05 PM');
     await message(chat,'Seonghyeon','Already?','9:05 PM');
     await message(chat,'Silvia','Yeah.','9:05 PM');
-    await message(chat,'Silvia','Tomorrow starts at **6 AM**.','9:05 PM');
+    await message(chat,'Silvia','Tomorrow starts at 6 AM.','9:05 PM');
     await message(chat,'Keonho','...','9:05 PM');
     await message(chat,'Keonho','No.','9:05 PM');
     await message(chat,'Elvaro','Yes.','9:05 PM');
@@ -635,10 +635,10 @@ async function runEpisode3() {
   await message(chat,'Keonho',"Because we're communicating during a pandemic.",'08:10 AM');
   await message(chat,'Elvaro','Brilliant.','08:10 AM');
   await message(chat,'Martin','How many people?','08:10 AM');
-  await message(chat,'Silvia','Five.','08:10 AM');
+  await message(chat,'Silvia','Six.','08:10 AM');
   await message(chat,'Keonho','Oh.','08:10 AM');
   await message(chat,'Keonho','Wait.','08:10 AM');
-  await message(chat,'Keonho',"We're five.",'08:10 AM');
+  await message(chat,'Keonho',"We're Six.",'08:10 AM');
   await message(chat,'Seonghyeon','Looks like it.','08:10 AM');
   await message(chat,'Silvia',"So we're basically a group now.",'08:10 AM');
   await message(chat,'Player','I guess I got lucky.','08:10 AM');
