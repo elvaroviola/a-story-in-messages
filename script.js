@@ -1485,10 +1485,10 @@ showChoices([
       "Sometimes, getting closer doesn't mean saying more. Sometimes, it simply means choosing to stay a little longer.",
       'CONTINUE',
       () => replayPrompt()
-    );
-
+        );
+      });
+    });
   });
-
 }
 
 function replayPrompt() {
