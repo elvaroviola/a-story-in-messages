@@ -1,362 +1,126 @@
-const screens = {
-  welcome: document.getElementById("welcome-screen"),
-  name: document.getElementById("name-screen"),
-  chat: document.getElementById("chat-screen"),
-  end: document.getElementById("end-screen")
+const screen = document.getElementById('screen');
+const state = { playerName:'', affection:0, trust:0, compatibility:0, episode:1, locked:false };
+
+const profiles = {
+  Keonho:'assets/keonho.png',
+  Martin:'assets/martin.jpeg',
+  Elvaro:'assets/elvaro.png',
+  Sanghyeon:'assets/seonghyeon.jpeg',
+  Silvia:'assets/silvia.jpeg'
 };
+const group = { name:'Fresher Group 7 🎓', sub:'UMN · Communication Science · 2020' };
 
-const startBtn = document.getElementById("start-btn");
-const nameBtn = document.getElementById("name-btn");
-const nameInput = document.getElementById("name-input");
-const nameError = document.getElementById("name-error");
-const replayBtn = document.getElementById("replay-btn");
-const backBtn = document.getElementById("back-btn");
-const chatMessages = document.getElementById("chat-messages");
-const choiceArea = document.getElementById("choice-area");
-const choices = document.getElementById("choices");
-const choiceLabel = document.getElementById("choice-label");
-const chatTitle = document.getElementById("chat-title");
-const statusText = document.getElementById("status-text");
-const avatar = document.querySelector(".martin-avatar");
+const sleep = ms => new Promise(r=>setTimeout(r,ms));
+const esc = s => String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]));
 
-let playerName = "";
-let martinAffection = 0;
-
-function wait(ms){return new Promise(r=>setTimeout(r,ms))}
-function personalize(text){return text.replaceAll("[NAME]",playerName)}
-function showScreen(screen){Object.values(screens).forEach(s=>s.classList.remove("active"));screen.classList.add("active")}
-function scrollBottom(){requestAnimationFrame(()=>chatMessages.scrollTop=chatMessages.scrollHeight)}
-function addDate(text){const d=document.createElement("div");d.className="date-divider";d.textContent=text;chatMessages.appendChild(d);scrollBottom()}
-function addBubble(sender,text,you=false){
-  const row=document.createElement("div");row.className=`message-row ${you?"you":"them"}`;
-  const b=document.createElement("div");b.className="bubble";
-  b.innerHTML=`${you?"":`<div class="sender-name">${personalize(sender)}</div>`}${personalize(text)}<span class="message-time">now</span>`;
-  row.appendChild(b);chatMessages.appendChild(row);scrollBottom();
+function startScreen(){
+  screen.innerHTML=`<div class="screen center fade">
+    <div class="status">9:41</div>
+    <div class="eyebrow">A little chat story · UMN · 2020</div>
+    <h1>A Story<br><span class="script">in Messages</span></h1>
+    <p class="subtitle">Same university. Different screens. Same feelings.<br><br>A tiny interactive story about meeting the right people at the most unexpected time.</p>
+    <button class="primary" id="start">START YOUR STORY →</button>
+    <div class="small-note">made for one very specific group of friends ♡</div>
+  </div>`;
+  document.getElementById('start').onclick=nameScreen;
 }
-function addTyping(){
-  const row=document.createElement("div");row.className="typing-row";row.id="typing-indicator";
-  row.innerHTML=`<div class="typing-bubble"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
-  chatMessages.appendChild(row);scrollBottom();
+function nameScreen(){
+  screen.innerHTML=`<div class="screen center fade">
+    <div class="eyebrow">Before we begin</div><h1>What's your<br><span class="script">name?</span></h1>
+    <p class="subtitle">This story will be yours. Your name will appear naturally inside the conversations.</p>
+    <div class="name-wrap"><input id="name" class="name-input" maxlength="24" placeholder="Enter your name..." autocomplete="off"><button class="primary" id="continue">CONTINUE →</button></div>
+  </div>`;
+  const go=()=>{const n=document.getElementById('name').value.trim();if(!n)return;state.playerName=n;intro();};
+  document.getElementById('continue').onclick=go; document.getElementById('name').addEventListener('keydown',e=>e.key==='Enter'&&go());
 }
-function removeTyping(){document.getElementById("typing-indicator")?.remove()}
-function setChatMode(title,status,letter){chatTitle.textContent=title;statusText.textContent=status;avatar.textContent=letter}
-async function sendMessage(m){
-  const [sender,text,third]=m, you=third===true, delay=typeof third==="number"?third:null;
-  if(you){await wait(350);addBubble(sender,text,true);await wait(350);return}
-  addTyping();await wait(delay??Math.min(2600,Math.max(850,650+text.length*24)));removeTyping();
-  addBubble(sender,text,false);await wait(500);
-}
-async function playMessages(list){for(const m of list)await sendMessage(m)}
-function showChoices(data,callback,label="How do you respond?"){
-  choiceLabel.textContent=label;choices.innerHTML="";
-  data.forEach(item=>{const btn=document.createElement("button");btn.className="choice";btn.textContent=personalize(item.text);btn.onclick=()=>callback(item);choices.appendChild(btn)});
-  choiceArea.classList.remove("hidden");scrollBottom();
-}
-function hideChoices(){choiceArea.classList.add("hidden")}
-async function transitionTo(title,status,letter,date){
-  chatMessages.innerHTML="";
-  setChatMode(title,status,letter);
-  addDate(date);
-  addTyping();
-  await wait(1100);
-  removeTyping();
+function intro(){
+  screen.innerHTML=`<div class="screen center fade"><div class="eyebrow">Nice to meet you,</div><h1>${esc(state.playerName)}.</h1><p class="subtitle">Your story begins with a group chat, a university orientation, and five people who definitely did not expect to end up in the same room.</p><button class="primary" id="begin">TAP TO CONTINUE</button></div>`;
+  document.getElementById('begin').onclick=()=>episodeBanner(1,runEpisode1);
 }
 
-/* =========================
-   EPISODE 1
-   ========================= */
-const ep1Group = [
-  ["Silvia","hey everyone!!",900],
-  ["Keonho","is this the freshman orientation group?",1100],
-  ["Seonghyeon","yes.",850],
-  ["Elvaro","finally.",850],
-  ["Silvia","we're actually classmates 😭",1200],
-  ["Keonho","this is going to be interesting.",1300],
-  ["Martin","morning.",900],
-  ["Silvia","MARTINNN",950],
-  ["Keonho","you actually showed up.",1000],
-  ["Martin","I was here the whole time.",1200],
-  ["Elvaro","sure.",850],
-  ["Seonghyeon","has everyone introduced themselves?",1200],
-  ["Silvia","wait that's a good idea.",1000],
-  ["Silvia","let's do introductions.",1000]
-];
-
-const ep1Choice1 = [
-  {text:"Hi, I'm [NAME]. Nice to meet you!",points:2,msg:[
-    ["[NAME]","Hi, I'm [NAME]. Nice to meet you!",true],
-    ["Silvia","nice to meet you!!",1000],
-    ["Keonho","welcome to the chaos.",1100],
-    ["Elvaro","accurate.",800],
-    ["Martin","nice to meet you, [NAME].",1300]
-  ]},
-  {text:"I'm [NAME]. I don't know what else to say 😭",points:2,msg:[
-    ["[NAME]","I'm [NAME]. I don't know what else to say 😭",true],
-    ["Keonho","honest. I like it.",1100],
-    ["Silvia","HAHAHAHA same.",900],
-    ["Martin","that's enough of an introduction.",1300]
-  ]},
-  {text:"[NAME]. That's it.",points:1,msg:[
-    ["[NAME]","[NAME]. That's it.",true],
-    ["Keonho","wow.",850],
-    ["Silvia","mysterious.",1000],
-    ["Elvaro","efficient.",950],
-    ["Martin","noted.",1000]
-  ]}
-];
-
-const ep1After1 = [
-  ["Silvia","okay now I feel like we're actually a group.",1200],
-  ["Keonho","don't get too comfortable.",900],
-  ["Elvaro","too late.",800],
-  ["Seonghyeon","what time does orientation start?",1200],
-  ["Martin","eight, I think.",1000],
-  ["Silvia","that's soon.",900]
-];
-
-const ep1Choice2 = [
-  {text:"I'm excited, honestly.",points:2,msg:[
-    ["[NAME]","I'm excited, honestly.",true],
-    ["Martin","really?",1000],
-    ["[NAME]","yeah.",true],
-    ["Martin","that's nice.",1100],
-    ["Martin","I'm a little nervous.",1300],
-    ["[NAME]","you?",true],
-    ["Martin","a little.",1000]
-  ]},
-  {text:"I'm nervous.",points:2,msg:[
-    ["[NAME]","I'm nervous.",true],
-    ["Martin","same.",950],
-    ["[NAME]","really?",true],
-    ["Martin","a little.",1000],
-    ["Martin","guess we're in the same boat.",1400]
-  ]},
-  {text:"I just want the day to be over.",points:1,msg:[
-    ["[NAME]","I just want the day to be over.",true],
-    ["Martin","it's not even started yet 😭",1400],
-    ["[NAME]","exactly.",true],
-    ["Martin","fair.",850]
-  ]}
-];
-
-const ep1Choice3 = [
-  {text:"Stay and keep talking.",points:2,msg:[
-    ["[NAME]","I'm not sleepy yet.",true],
-    ["Martin","good.",900],
-    ["Martin","I was hoping you'd stay.",1500],
-    ["[NAME]","why?",true],
-    ["Martin","I don't know.",1000],
-    ["Martin","you're easy to talk to.",1500]
-  ]},
-  {text:"Tell him you're tired.",points:1,msg:[
-    ["[NAME]","I'm getting sleepy.",true],
-    ["Martin","then you should sleep.",1000],
-    ["[NAME]","you too.",true],
-    ["Martin","probably.",900],
-    ["Martin","goodnight, [NAME].",1400]
-  ]},
-  {text:"Tease him about being awake.",points:2,msg:[
-    ["[NAME]","weren't you the one who said you were tired?",true],
-    ["Martin","I am.",1000],
-    ["[NAME]","doesn't look like it.",true],
-    ["Martin","maybe you're keeping me awake.",1500],
-    ["[NAME]","me?",true],
-    ["Martin","maybe.",1100]
-  ]}
-];
-
-async function episode1(){
-  chatMessages.innerHTML="";setChatMode("UMN Freshman Orientation","online","U");
-  addDate("SEPTEMBER 2020 · 8:32 AM");
-  await wait(700);await playMessages(ep1Group);
-  showChoices(ep1Choice1,async c1=>{
-    hideChoices();martinAffection+=c1.points;await playMessages(c1.msg);await playMessages(ep1After1);
-    showChoices(ep1Choice2,async c2=>{
-      hideChoices();martinAffection+=c2.points;await playMessages(c2.msg);
-      await transitionTo("Martin","online","M","PRIVATE CHAT · 11:48 PM");
-      await sendMessage(["Martin","you still awake, [NAME]?",1500]);
-      showChoices(ep1Choice3,async c3=>{
-        hideChoices();martinAffection+=c3.points;await playMessages(c3.msg);
-        await wait(1500);
-        await sendMessage(["Martin","see you tomorrow.",1500]);
-        await sendMessage(["[NAME]","see you.",true]);
-        await sendMessage(["Martin","good night [NAME]",1500]);
-        await sendMessage(["[NAME]","good night, Martin",true]);
-        await sendMessage(["Martin","and don't oversleep",1500]);
-        await sendMessage(["[NAME]","no promises",true]);
-        await sendMessage(["Martin","I had a feeling you'd say that",1500]);
-        await wait(1500);
-        addDate("EPISODE 1 · END");
-        await wait(1000);
-        await episode2();
-      });
-    });
-  });
+function episodeBanner(n,next){
+  screen.innerHTML=`<div class="screen episode-card fade"><div><div class="eyebrow">September 2020 · UMN</div><h2>Episode ${n}</h2><div class="conclusion">Conclusion</div><p class="subtitle" style="margin:20px auto 0">${n===1?'Nice to Meet You':n===2?'Are You Still Awake?':'The Group Chat'}</p><button class="primary" id="openEpisode">OPEN EPISODE ${n} →</button></div></div>`;
+  document.getElementById('openEpisode').onclick=next;
 }
 
-/* =========================
-   EPISODE 2
-   ========================= */
-const ep2Morning = [
-  ["Silvia","GOOD MORNING EVERYONEEEE ☀️",900],
-  ["Keonho","why are you awake this early",1100],
-  ["Silvia","because today's orientation???",1000],
-  ["Keonho","exactly why I'm not emotionally prepared",1300],
-  ["Elvaro","it's 7:41",900],
-  ["Elvaro","orientation starts in 19 minutes",1200],
-  ["Keonho","that's not helping",1000],
-  ["Seonghyeon","did everyone already join the Zoom?",1200],
-  ["Silvia","WAIT",800],
-  ["Silvia","WHAT",700],
-  ["Silvia","WE HAVE TO JOIN NOW???",1200],
-  ["Keonho","I'M STILL IN BED",1000],
-  ["Elvaro","congratulations.",1000]
-];
-
-const ep2Choice1 = [
-  {text:"Yeah, I'm already ready.",points:2,msg:[
-    ["[NAME]","Yeah, I'm already ready.",true],["Martin","impressive.",1200],
-    ["[NAME]","why?",true],["Martin","you sounded like someone who would oversleep.",1500],
-    ["[NAME]","wow.",true],["Martin","I said sounded.",1100],["[NAME]","sure.",true],["Martin","fair enough.",1000]
-  ]},
-  {text:"No 😭 I'm still getting ready.",points:2,msg:[
-    ["[NAME]","No 😭 I'm still getting ready.",true],["Martin","I knew it.",1100],
-    ["[NAME]","how???",true],["Martin","you literally said \"no promises\" last night.",1600],
-    ["[NAME]","you remembered that?",true],["Martin","unfortunately.",1200],
-    ["[NAME]","rude.",true],["Martin","just hurry up.",1100]
-  ]},
-  {text:"I was about to ask you the same thing.",points:1,msg:[
-    ["[NAME]","I was about to ask you the same thing.",true],["Martin","I'm ready.",1000],
-    ["[NAME]","really?",true],["Martin","yes.",800],["[NAME]","prove it.",true],
-    ["Martin","what kind of proof do you want 😭",1500],["[NAME]","I don't know.",true],
-    ["Martin","then I'll assume I passed.",1300]
-  ]}
-];
-
-const ep2After1 = [
-  ["Silvia","GUYS",850],["Silvia","THE LINK IS IN THE EMAIL",1300],["Keonho","we know",900],
-  ["Silvia","I'M JUST MAKING SURE",1200],["Elvaro","thank you for your service.",1200],
-  ["Seonghyeon","I'm joining.",950],["Keonho","wait for me",900],["Elvaro","no.",700],
-  ["Keonho","why",800],["Elvaro","because you said you were still in bed.",1500],
-  ["Martin","I'm joining too.",1100],["Martin","see you there.",1000]
-];
-
-const ep2PrivateIntro = [["Martin","hey.",1100],["Martin","are you actually paying attention?",1700]];
-
-const ep2Choice2 = [
-  {text:"Of course I am.",points:1,msg:[
-    ["[NAME]","Of course I am.",true],["Martin","good.",900],
-    ["Martin","because I have no idea what's happening.",1500],["[NAME]","😭",true],
-    ["Martin","I thought you knew.",1200],["[NAME]","I was just pretending.",true],
-    ["Martin","so we're both pretending.",1300],["[NAME]","apparently.",true],["Martin","nice.",900]
-  ]},
-  {text:"Not really 😭",points:2,msg:[
-    ["[NAME]","Not really 😭",true],["Martin","thank god.",1100],["[NAME]","why?",true],
-    ["Martin","I thought I was the only one.",1400],["[NAME]","what are you doing then?",true],
-    ["Martin","looking at the screen and hoping something makes sense.",1900],
-    ["[NAME]","same.",true],["Martin","good.",900],["Martin","we're doing great.",1300]
-  ]},
-  {text:"Why? Are you?",points:2,msg:[
-    ["[NAME]","Why? Are you?",true],["Martin","...",900],["Martin","no.",800],
-    ["[NAME]","HAHAHAHA",true],["Martin","don't expose me.",1200],
-    ["[NAME]","I won't.",true],["Martin","thank you.",1000],["[NAME]","you're welcome.",true]
-  ]}
-];
-
-const ep2Choice3 = [
-  {text:"Maybe something creative.",points:2,msg:[
-    ["[NAME]","Maybe something creative.",true],["Martin","makes sense.",1100],
-    ["[NAME]","why?",true],["Martin","I don't know.",900],
-    ["Martin","you just seem like that kind of person.",1600],["[NAME]","what kind?",true],
-    ["Martin","I'll tell you when I figure it out.",1500],["[NAME]","that's suspicious.",true],["Martin","maybe.",1000]
-  ]},
-  {text:"Probably nothing. I just want to survive university.",points:1,msg:[
-    ["[NAME]","Probably nothing. I just want to survive university.",true],
-    ["Martin","that's actually a good goal.",1400],["[NAME]","thank you.",true],
-    ["Martin","we can survive together.",1400],["[NAME]","\"we\"?",true],
-    ["Martin","as classmates.",1200],["[NAME]","sure.",true],["Martin","don't make it weird 😭",1400]
-  ]},
-  {text:"I haven't decided. Maybe I'll figure it out later.",points:1,msg:[
-    ["[NAME]","I haven't decided. Maybe I'll figure it out later.",true],["Martin","same.",900],
-    ["[NAME]","at least I'm not the only one.",true],["Martin","nope.",850],
-    ["Martin","we can figure it out eventually.",1400]
-  ]}
-];
-
-const ep2GroupEnd = [
-  ["Silvia","WE SURVIVED!!!!",1000],["Keonho","barely",850],["Elvaro","speak for yourself",1100],
-  ["Seonghyeon","we still have another session later.",1500],["Keonho","...",900],
-  ["Keonho","I take it back.",1000],["Silvia","HAHAHAHA",900],
-  ["Martin","I'll probably disappear for a bit.",1400],["Silvia","where are you going?",1000],
-  ["Martin","lunch.",850],["Keonho","without us???",1200],["Martin","yes.",800],["Elvaro","cruel.",900]
-];
-
-const ep2Choice4 = [
-  {text:"Yeah, I'm hungry.",points:2,msg:[
-    ["[NAME]","Yeah, I'm hungry.",true],["Martin","good.",900],["Martin","go eat.",950],
-    ["[NAME]","you too.",true],["Martin","I will.",850],["[NAME]","promise?",true],["Martin","promise.",1000]
-  ]},
-  {text:"Not yet.",points:1,msg:[
-    ["[NAME]","Not yet.",true],["Martin","you should eat.",1100],["[NAME]","I'll eat later.",true],
-    ["Martin","don't forget.",1050],["[NAME]","I won't.",true],["Martin","good.",850]
-  ]},
-  {text:"Are you inviting me? 👀",points:3,msg:[
-    ["[NAME]","Are you inviting me? 👀",true],["Martin","maybe.",1500],["[NAME]","maybe???",true],
-    ["Martin","I was just asking.",1400],["[NAME]","sure.",true],["Martin","don't make this difficult 😭",1500],
-    ["[NAME]","I'm not.",true],["Martin","you are.",1100]
-  ]}
-];
-
-const ep2Final = [
-  ["Martin","anyway.",950],["Martin","I'll see you later.",1200],["[NAME]","see you.",true],
-  ["Martin","and [NAME]?",1400],["[NAME]","yeah?",true],["Martin","glad you joined the group.",1600],
-  ["[NAME]","why?",true],["Martin","I don't know.",1000],
-  ["Martin","the group would've been more boring without you.",1900],
-  ["Martin","don't let that get to your head.",1500],["[NAME]","too late.",true],["Martin","😭",900]
-];
-
-async function episode2(){
-  await transitionTo("UMN Freshman Orientation","online","U","SEPTEMBER 2020 · 7:41 AM");
-  await playMessages(ep2Morning);
-  await sendMessage(["Martin","[NAME], are you joining already?",1100]);
-  showChoices(ep2Choice1,async c1=>{
-    hideChoices();martinAffection+=c1.points;await playMessages(c1.msg);await playMessages(ep2After1);
-
-    await transitionTo("Martin","online","M","PRIVATE CHAT · 8:03 AM");
-    await playMessages(ep2PrivateIntro);
-    showChoices(ep2Choice2,async c2=>{
-      hideChoices();martinAffection+=c2.points;
-      await playMessages(c2.msg);await wait(650);
-      await playMessages([
-        ["Martin","they're talking about campus organizations now.",1400],
-        ["[NAME]","already?",true],["Martin","apparently.",900],
-        ["[NAME]","have you thought about joining one?",true],
-        ["Martin","maybe.",900],["[NAME]","which one?",true],
-        ["Martin","not sure yet.",1000],["Martin","you?",1100]
-      ]);
-      showChoices(ep2Choice3,async c3=>{
-        hideChoices();martinAffection+=c3.points;await playMessages(c3.msg);
-
-        await transitionTo("UMN Freshman Orientation","online","U","SEPTEMBER 2020 · 10:16 AM");
-        await playMessages(ep2GroupEnd);
-        await sendMessage(["Martin","[NAME], you eating too?",1300]);
-        showChoices(ep2Choice4,async c4=>{
-          hideChoices();martinAffection+=c4.points;await playMessages(c4.msg);
-
-          await transitionTo("Martin","online","M","PRIVATE CHAT · 10:29 AM");
-          await playMessages(ep2Final);
-          await wait(1800);
-          statusText.textContent="last seen just now";
-          await wait(700);
-          showScreen(screens.end);
-        });
-      });
-    });
-  });
+function chatShell({type='group',name,status='online',avatar=null,sub=group.sub}){
+  const isGroup=type==='group';
+  screen.innerHTML=`<div class="chat-page fade"><header class="chat-header">${isGroup?'<div class="group-icon">G7</div>':`<img class="avatar" src="${avatar}" alt="">`}<div class="header-copy"><div class="header-name">${esc(name)}</div><div class="header-status">${esc(status)}</div></div><div class="header-meta">${isGroup?'•••':'⋯'}</div></header><div id="chat" class="chat-scroll"><div class="date-divider">${esc(sub)}</div></div><div id="choices" class="choice-wrap" style="display:none"></div></div>`;
+}
+function appendTyping(chat, profile){
+  const row=document.createElement('div');row.className='msg-row fade';row.innerHTML=`<img class="msg-avatar" src="${profile}" alt=""><div class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;chat.appendChild(row);chat.scrollTop=chat.scrollHeight;return row;
+}
+async function message(chat, who, text, time, opts={}){
+  const me=who==='Player';
+  if(!me && opts.typing!==false){const t=appendTyping(chat,profiles[who]);await sleep(opts.delay ?? 1200);t.remove();}
+  const row=document.createElement('div');row.className=`msg-row ${me?'me':''} fade`;
+  row.innerHTML=me?`<div class="msg-stack"><div class="bubble">${esc(text)}</div><div class="time">${esc(time||'now')} ✓✓</div></div>`:`<img class="msg-avatar" src="${profiles[who]}" alt=""><div class="msg-stack"><div class="sender">${esc(who)}</div><div class="bubble">${esc(text)}</div><div class="time">${esc(time||'now')}</div></div>`;
+  chat.appendChild(row);chat.scrollTop=chat.scrollHeight;await sleep(opts.after ?? (me?850:950));
+}
+function showChoices(items,onPick){
+  const box=document.getElementById('choices');box.style.display='block';box.innerHTML=`<div class="choice-title">How do you want to respond?</div>`+items.map((x,i)=>`<button class="choice" data-i="${i}">${esc(x.text)}</button>`).join('');
+  [...box.querySelectorAll('.choice')].forEach(b=>b.onclick=()=>{box.style.display='none';onPick(items[Number(b.dataset.i)]);});
+}
+async function finishEpisode(n,next){
+  await sleep(700);screen.innerHTML=`<div class="screen episode-card fade"><div><div class="eyebrow">A chapter has ended</div><h2>End of Episode ${n}</h2><div class="conclusion">Conclusion</div><p class="subtitle" style="margin:20px auto 0">Your choices have been saved. The story continues from here.</p><button class="primary" id="next">CONTINUE TO EPISODE ${n+1} →</button></div></div>`;
+  document.getElementById('next').onclick=next;
 }
 
-startBtn.onclick=()=>{showScreen(screens.name);setTimeout(()=>nameInput.focus(),250)}
-nameBtn.onclick=()=>{const n=nameInput.value.trim();if(!n){nameError.textContent="Tell me your name first.";nameInput.focus();return}playerName=n;nameError.textContent="";martinAffection=0;showScreen(screens.chat);episode1()}
-nameInput.onkeydown=e=>{if(e.key==="Enter")nameBtn.click()}
-replayBtn.onclick=()=>{nameInput.value="";nameError.textContent="";showScreen(screens.welcome)}
-backBtn.onclick=()=>showScreen(screens.name)
+async function runEpisode1(){
+  state.episode=1;chatShell({name:group.name,status:'6 online',sub:'SEPTEMBER 2020 · FIRST NIGHT'});const chat=document.getElementById('chat');
+  await sleep(600);
+  await message(chat,'Silvia','hi guys — is this the right group?','9:12 PM');
+  await message(chat,'Keonho',"if this isn't the right group i'm leaving",'9:12 PM');
+  await message(chat,'Elvaro','another victim has arrived.','9:13 PM');
+  await message(chat,'Sanghyeon','Orientation starts at 6 tomorrow.','9:13 PM');
+  await message(chat,'Martin','wait, 6 AM?','9:14 PM');
+  await message(chat,'Keonho','yes bro. morning exists.','9:14 PM');
+  await message(chat,'Player','hi... sorry, am I late?','9:15 PM');
+  await message(chat,'Silvia','nooo you’re good! welcome!','9:15 PM');
+  await message(chat,'Martin','welcome lol','9:15 PM');
+  await message(chat,'Martin',`hey, sorry to bother you. did you understand what we're supposed to submit tomorrow?`,'9:16 PM');
+  showChoices([
+    {text:'I think so. Want me to send you what I have?',effect:()=>state.compatibility++},
+    {text:"Honestly no — I'm confused too.",effect:()=>state.compatibility++},
+    {text:"I'm just going to figure it out tomorrow.",effect:()=>{}}
+  ],async choice=>{choice.effect();await message(chat,'Player',choice.text,'9:16 PM');await message(chat,'Martin','guess we’re figuring this out together then.','9:17 PM');await finishEpisode(1,()=>episodeBanner(2,runEpisode2));});
+}
+
+async function runEpisode2(){
+  state.episode=2;chatShell({type:'dm',name:'Martin',status:'online',avatar:profiles.Martin,sub:'ORIENTATION DAY · 06:00 AM — 06:00 PM'});const chat=document.getElementById('chat');
+  await sleep(900);
+  await message(chat,'Martin','hey, are you still awake?','11:47 PM');
+  await message(chat,'Player','yeah. unfortunately.','11:48 PM');
+  await message(chat,'Martin','same. did you finish the assignment?','11:48 PM');
+  showChoices([
+    {text:"Almost. I'm procrastinating.",effect:()=>state.affection++},
+    {text:'Yeah, finished it earlier.',effect:()=>state.affection++},
+    {text:'I forgot about it completely 😭',effect:()=>state.compatibility++}
+  ],async choice=>{choice.effect();await message(chat,'Player',choice.text,'11:49 PM');await message(chat,'Martin','btw, where are you from?','11:50 PM');await message(chat,'Martin','what made you choose this university?','11:50 PM');showChoices([
+    {text:'I actually wanted to be here.',effect:()=>state.affection++},
+    {text:'It was the practical choice.',effect:()=>state.compatibility++},
+    {text:'Long story.',effect:()=>{}}
+  ],async c2=>{c2.effect();await message(chat,'Player',c2.text,'11:51 PM');await message(chat,'Martin',"you're actually pretty easy to talk to.",'11:52 PM');await message(chat,'Martin','good night. see you tomorrow.','11:53 PM');await finishEpisode(2,()=>episodeBanner(3,runEpisode3));});});
+}
+
+async function runEpisode3(){
+  state.episode=3;chatShell({name:group.name,status:'6 online',sub:'ORIENTATION DAY · 06:00 AM — 06:00 PM'});const chat=document.getElementById('chat');
+  await sleep(700);
+  await message(chat,'Silvia','morning everyone. please tell me you’re awake.','6:02 AM');
+  await message(chat,'Keonho','physically? yes. spiritually? no.','6:03 AM');
+  await message(chat,'Elvaro','skill issue.','6:03 AM');
+  await message(chat,'Sanghyeon','let’s survive until 6 PM first.','6:04 AM');
+  await message(chat,'Martin',`hey ${state.playerName}, did you get the orientation instructions?`,'6:05 AM');
+  await message(chat,'Player','I don’t understand question 4.','10:21 AM');
+  await message(chat,'Martin','what part don’t you understand? I’ll explain.','10:22 AM');
+  showChoices([
+    {text:"Thank you, you're saving my life.",effect:()=>state.affection++},
+    {text:'I owe you one.',effect:()=>state.trust++},
+    {text:'Never mind, I figured it out.',effect:()=>{}}
+  ],async choice=>{choice.effect();await message(chat,'Player',choice.text,'10:22 AM');await message(chat,'Keonho','why does Martin answer every time they ask something?','10:23 AM');await message(chat,'Martin','because unlike you, I know how to read.','10:23 AM');await message(chat,'Silvia','PLEASE focus 😭','10:24 AM');await message(chat,'Sanghyeon','orientation ends at 6. don’t die before then.','5:58 PM');await message(chat,'Elvaro','group chat survived day one.','6:01 PM');await finishEpisode(3,()=>startLockedNotice());});
+}
+function startLockedNotice(){
+  screen.innerHTML=`<div class="screen center fade"><div class="eyebrow">Prototype milestone</div><h1>Episodes 1–3<br><span class="script">are live.</span></h1><p class="subtitle">The branching data is already wired into the same hidden stats system. Episodes 4–10 can be added without changing the chat engine.</p><div class="timeline"><b>Current stats are hidden</b><br>Martin Affection · Trust · Compatibility<br><br>Happy Ending threshold remains: Affection ≥ 11 + Trust ≥ 6.</div><button class="primary" onclick="location.reload()">REPLAY FROM START</button></div>`;
+}
+
+startScreen();
