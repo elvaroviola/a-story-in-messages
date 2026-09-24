@@ -1,4 +1,4 @@
-const screen = document.getElementById('screen');
+const screen = document.getElementById('screen') || document.getElementById('app');
 
 const state = {
   playerName: '',
