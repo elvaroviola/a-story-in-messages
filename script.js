@@ -1489,6 +1489,8 @@ showChoices([
 
   });
 
+}
+
 function replayPrompt() {
   screen.innerHTML = `
     <div class="screen center fade">
