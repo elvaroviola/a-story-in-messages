@@ -1488,7 +1488,6 @@ showChoices([
         );
       });
     });
-  });
 }
 
 function replayPrompt() {
