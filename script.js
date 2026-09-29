@@ -126,7 +126,7 @@ function appendTyping(chat, who) {
   return row;
 }
 
-async function message(chat, who, text, time, {typing=true, delay=1800, after=700}={}) {
+async function message(chat, who, text, time, {typing=true, delay=1600, after=600}={}) {
   const rendered = playerText(text);
   const me = who === 'Player';
 
@@ -1110,7 +1110,7 @@ async function runEpisode5() {
 
   // In the morning — 08:16 AM
 
-  await message(morning,'Martin','Morning.','08:16 AM');
+  await message(morning,'Martin','Morning, [NAME]','08:16 AM');
   await message(morning,'Player','Morning.','08:16 AM');
   await message(morning,'Martin','Did you sleep?','08:16 AM');
   await message(morning,'Player','Barely.','08:17 AM');
@@ -1337,8 +1337,8 @@ showChoices([
     await message(eveningGroup,'Silvia','WHAT.','06:42 PM');
     await message(eveningGroup,"Keonho","Teacher's pet.",'06:42 PM');
     await message(eveningGroup,"Seonghyeon","I'm just organized.",'06:43 PM');
-    await message(eveningGroup,'Martin','Player and I finished ours too.','06:43 PM');
-    await message(eveningGroup,'"Keonho"','"Player and I"','06:43 PM');
+    await message(eveningGroup,'Martin','[NAME] and I finished ours too.','06:43 PM');
+    await message(eveningGroup,'"Keonho"','"[NAME] and I"','06:43 PM');
     await message(eveningGroup,'Silvia','👀','06:43 PM');
     await message(eveningGroup,'Elvaro','Again.','06:43 PM');
     await message(eveningGroup,'Martin','Please.','06:43 PM');
