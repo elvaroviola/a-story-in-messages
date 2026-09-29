@@ -540,7 +540,7 @@ async function runEpisode2() {
       ], async choice3 => {
         choice3.effect();
         await message(groupChat,'Player',choice3.text,'03:00 PM');
-        await message(groupChat,'Martin','I like A.','03:00 PM');
+        await message(groupChat,'Martin','I like the spirit!','03:00 PM');
         await message(groupChat,'Keonho','Of course you do.','03:00 PM');
         await message(groupChat,'Silvia',"Okay, let's actually work.",'03:00 PM');
 
@@ -1420,7 +1420,7 @@ showChoices([
     await message(night,'Martin','Bad different?','09:29 PM');
     await message(night,'Player','No.','09:29 PM');
     await message(night,'Player','Just...','09:29 PM');
-    await message(night,'Player','like a happiest person.','09:30 PM');
+    await message(night,'Player','Like a happiest person.','09:30 PM');
     await message(night,'Martin','Oh.','09:30 PM');
     await message(night,'Player',"Don't get used to that compliment.",'09:30 PM');
     await message(night,'Martin','Too late.','09:30 PM');
@@ -1493,8 +1493,8 @@ showChoices([
 function replayPrompt() {
   screen.innerHTML = `
     <div class="screen center fade">
-      <div class="eyebrow">✦ END OF EPISODE 04</div>
-      <h1>Episode 4<br><span class="script">complete.</span></h1>
+      <div class="eyebrow">✦ END OF EPISODE 05</div>
+      <h1>Episode 5<br><span class="script">complete.</span></h1>
       <p class="subtitle">The story will continue from here.</p>
       <button class="primary" id="replay">REPLAY FROM START</button>
     </div>`;
